@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lambo AI Browser</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    input {
+      background: #222;
+      color: white;
+    }
+
+    button {
+      background: #444;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #666;
+    }
+
+    #output {
+      width: 100%;
+      max-width: 400px;
+      margin-top: 20px;
+      background: #111;
+      padding: 15px;
+      border-radius: 8px;
+      min-height: 80px;
+      line-height: 1.4;
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Lambo AI Search</h1>
+
+  <input id="apiKeyInput" type="text" placeholder="Enter your Gemini API Key" />
+  <button onclick="saveApiKey()">Save API Key</button>
+
+  <input id="searchInput" type="text" placeholder="Type a URL or ask Lambo..." />
+  <button onclick="runSearch()">Search</button>
+
+  <div id="output"></div>
+
+  <script>
+    // Load API key if saved
+    document.getElementById("apiKeyInput").value =
+      localStorage.getItem("lambo_api_key") || "";
+
+    function saveApiKey() {
+      const key = document.getElementById("apiKeyInput").value.trim();
+      if (!key) {
+        alert("API key cannot be empty.");
+        return;
+      }
+      localStorage.setItem("lambo_api_key", key);
+      alert("API key saved successfully!");
+    }
+
+    async function runSearch() {
+      const query = document.getElementById("searchInput").value.trim();
+      const apiKey = localStorage.getItem("lambo_api_key");
+      const output = document.getElementById("output");
+
+      if (!apiKey) {
+        output.textContent = "Please enter your API key first.";
+        return;
+      }
+
+      // If query is a URL → redirect directly
+      if (query.startsWith("http://") || query.startsWith("https://")) {
+        window.location.href = query;
+        return;
+      }
+      if (query.includes(".") && !query.includes(" ")) {
+        window.location.href = "https://" + query;
+        return;
+      }
+
+      // AI Search (Gemini Flash-Lite)
+      const endpoint =
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" +
+        apiKey;
+
+      output.textContent = "Lambo is thinking...";
+
+      try {
+        const body = {
+          contents: [{ parts: [{ text: query }] }]
+        };
+
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (data.candidates) {
+          output.textContent = data.candidates[0].content.parts[0].text;
+        } else {
+          output.textContent = "Error: " + JSON.stringify(data);
+        }
+      } catch (err) {
+        output.textContent = "Request failed: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
