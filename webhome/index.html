@@ -13,216 +13,83 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--white); font-family: 'Roboto', sans-serif; padding: 18px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  h1 { font-size: 2.6rem; margin-top: 10px; font-weight: 700; text-align: center; }
+  p.subtitle { color: #ccc; font-size: 1rem; text-align: center; margin-bottom: 18px; }
+  p.notice { font-size: 0.95rem; color: #e5e5e5; margin-bottom: 18px; text-align: center; }
+  p.notice a { color: var(--white); font-weight: bold; text-decoration: underline; }
 
-  body {
-    background: var(--bg);
-    color: var(--white);
-    font-family: "Roboto", sans-serif;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-  }
-
-  h1 {
-    font-size: 2.6rem;
-    margin-top: 10px;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  p.subtitle {
-    color: #ccc;
-    font-size: 1rem;
-    text-align: center;
-    margin-bottom: 18px;
-  }
-
-  p.notice {
-    font-size: 0.95rem;
-    color: #e5e5e5;
-    margin-bottom: 18px;
-    text-align: center;
-  }
-
-  p.notice a {
-    color: var(--white);
-    font-weight: bold;
-    text-decoration: underline;
-  }
-
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 18px;
-    width: 100%;
-    max-width: 450px;
-    margin-bottom: 18px;
-    box-shadow: var(--shadow);
-  }
-
-  input, button {
-    width: 100%;
-    padding: 16px;
-    border-radius: var(--radius);
-    border: none;
-    font-size: 16px;
-  }
-
-  input {
-    background: var(--surface-light);
-    color: var(--white);
-  }
-
-  button {
-    background: var(--white);
-    color: #000;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  #output {
-    background: #111;
-    min-height: 140px;
-    border-radius: var(--radius);
-    padding: 14px;
-    font-size: 15px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  #cat {
-    position: absolute;
-    bottom: 6px;
-    right: 6px;
-    width: 42px;
-    height: 42px;
-  }
-
-  .history-item {
-    color: var(--white);
-    text-decoration: underline;
-    cursor: pointer;
-    margin: 6px 0;
-  }
-
-  /* API Popup */
-  #apiPopup {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.75);
-    display: none;
-    justify-content: center;
-    align-items: center;
-  }
-
-  #apiBox {
-    background: var(--surface);
-    padding: 22px;
-    width: 90%;
-    max-width: 350px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  #apiBtn {
-    background: #fff;
-    color: #000;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 20px;
-    font-weight: 900;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    box-shadow: var(--shadow);
-  }
-</style></head><body>
-<h1>Lambo</h1>
-<p class="subtitle">Your monochrome AI cat assistant.</p>
-<p class="notice">This version was developed for the <a href="#" onclick="openNothing()">Nothing App</a>.</p><div class="card">
+  .card { background: var(--surface); border-radius: var(--radius); padding: 18px; width: 100%; max-width: 450px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  input, button { width: 100%; padding: 16px; border-radius: var(--radius); border: none; font-size: 16px; }
+  input { background: var(--surface-light); color: var(--white); }
+  button { background: var(--white); color: #000; font-weight: 700; cursor: pointer; }
+  #output { background: #111; min-height: 140px; border-radius: var(--radius); padding: 14px; font-size: 15px; position: relative; overflow: hidden; }
+  #cat { position: absolute; bottom: 6px; right: 6px; width: 42px; height: 42px; }
+  .history-item { color: var(--white); text-decoration: underline; cursor: pointer; margin: 6px 0; }
+  #apiPopup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); display: none; justify-content: center; align-items: center; }
+  #apiBox { background: var(--surface); padding: 22px; width: 90%; max-width: 350px; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
+  #apiBtn { background: #fff; color: #000; width: 48px; height: 48px; border-radius: 50%; font-size: 20px; font-weight: 900; display: flex; justify-content: center; align-items: center; cursor: pointer; position: fixed; bottom: 20px; right: 20px; box-shadow: var(--shadow); }
+  .steps { font-size: 0.9rem; color: #ccc; margin-top: 6px; }
+  @media(max-width:480px){ h1{ font-size:2.2rem; } p.subtitle{ font-size:0.9rem; } p.notice{ font-size:0.8rem; } }
+</style></head>
+<body><h1>Lambo</h1>
+<p class="subtitle">Your Friend and AI assistant.</p>
+<p class="notice">This version was developed for the <a href="#" onclick="openNothing()">Nothing</a> App.</p><div class="card">
   <input id="searchInput" type="text" placeholder="Ask Lambo or enter a URL..." />
   <button onclick="runSearch()">Search</button>
 </div><div class="card" id="output">
   Lambo is waiting for you...
   <img id="cat" src="https://i.imgur.com/3oV1gOi.png">
-</div><div class="card" id="historyContainer"></div><!-- API BUTTON --><div id="apiBtn" onclick="openApiPopup()">⚙</div><!-- API POPUP --><div id="apiPopup">
+</div><div class="card" id="historyContainer"></div><!-- Google CSE --><script async src="https://cse.google.com/cse.js?cx=f015436e565c94c8d"></script><div class="gcse-search"></div><!-- API BUTTON --><div id="apiBtn" onclick="openApiPopup()">⚙</div>
+<div id="apiPopup">
   <div id="apiBox">
     <h3 style="margin-bottom:6px;">API Key</h3>
     <input id="apiKeyInput" type="text" placeholder="Enter your Gemini API Key" />
     <button onclick="saveApiKey()">Save</button>
     <button onclick="closeApiPopup()" style="background:#444;color:white;">Close</button>
+    <div class="steps">
+      Steps to get your API Key:<br>
+      1. Visit <a href="https://studio.google.com/" target="_blank" style="color:white; text-decoration:underline;">Google AI Studio</a><br>
+      2. Sign in with your Google account<br>
+      3. Create a new project and generate an API key<br>
+      4. Paste the key above and save
+    </div>
   </div>
 </div><script>
 const apiKeyInput = document.getElementById('apiKeyInput');
 apiKeyInput.value = localStorage.getItem('lambo_api_key') || '';
 const popup = document.getElementById('apiPopup');
-
 function openApiPopup(){ popup.style.display = 'flex'; }
 function closeApiPopup(){ popup.style.display = 'none'; }
 function openNothing(){ window.location.href = "https://montryteam.github.io/app.montry.nothing/"; }
 
-function saveApiKey(){
-  const key = apiKeyInput.value.trim();
-  if(!key){ alert("API key cannot be empty."); return; }
-  localStorage.setItem('lambo_api_key', key);
-  popup.style.display = 'none';
-}
-
 let history = [];
-function addToHistory(q){
-  history.push(q);
-  document.getElementById('historyContainer').innerHTML = history.map(h => `<div class='history-item' onclick='loadHistory("${h}")'>${h}</div>`).join('');
-}
+function addToHistory(q){ history.push(q); document.getElementById('historyContainer').innerHTML = history.map(h => `<div class='history-item' onclick='loadHistory("${h}")'>${h}</div>`).join(''); }
 function loadHistory(q){ document.getElementById('searchInput').value = q; runSearch(); }
-
 function isUrl(t){ return /^https?:\/\//i.test(t) || (t.includes('.') && !t.includes(' ')); }
 
 async function runSearch(){
   const q = document.getElementById('searchInput').value.trim();
   const key = localStorage.getItem('lambo_api_key');
   const out = document.getElementById('output');
-
   if(!key){ out.textContent = "Please provide your API key."; return; }
   if(!q){ out.textContent = "Please type something."; return; }
-
   addToHistory(q);
-
   if(isUrl(q)) return window.location.href = q.startsWith('http') ? q : 'https://' + q;
-
   if(q.toLowerCase().includes("what ai") || q.toLowerCase().includes("which ai")){
     out.textContent = "I am Lambo, a monochrome AI cat built on Gemini. Developed by Montry.";
     return;
   }
-
   out.textContent = "Lambo is thinking...";
-
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${key}`;
-
   try{
     const body = { contents:[{parts:[{text:q}]}] };
     const res = await fetch(endpoint,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     const data = await res.json();
-
     let txt = data.candidates ? data.candidates[0].content.parts[0].text : JSON.stringify(data);
-
     out.textContent = "";
-    for(let i=0;i<txt.length;i++){
-      out.textContent += txt[i];
-      await new Promise(r => setTimeout(r, 22));
-    }
-  }
-  catch(e){ out.textContent = "Error: " + e.message; }
+    for(let i=0;i<txt.length;i++){ out.textContent += txt[i]; await new Promise(r=>setTimeout(r,22)); }
+  } catch(e){ out.textContent = "Error: " + e.message; }
 }
 </script></body>
 </html>
