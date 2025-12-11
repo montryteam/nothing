@@ -1,148 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lambo AI Browser</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lambo AI - Nothing App 🐾</title>
 
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+<style>
+  :root {
+    --primary: #00e5ff;
+    --background: #000;
+    --surface: #111;
+    --on-surface: #fff;
+    --card-radius: 18px;
+    --padding: 16px;
+    --shadow: 0 6px 20px rgba(0,0,0,0.5);
+  }
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+  * { box-sizing: border-box; margin:0; padding:0; }
 
-    input, button {
-      width: 100%;
-      max-width: 400px;
-      padding: 15px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
+  body {
+    background: var(--background);
+    color: var(--on-surface);
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    min-height: 100vh;
+  }
 
-    input {
-      background: #222;
-      color: white;
-    }
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 12px;
+  }
 
-    button {
-      background: #444;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+  p.subtitle {
+    color: #9aa0a6;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 1rem;
+  }
 
-    button:hover {
-      background: #666;
-    }
+  p.notice {
+    font-size: 0.9rem;
+    color: #ccc;
+    text-align: center;
+    margin-bottom: 12px;
+  }
 
-    #output {
-      width: 100%;
-      max-width: 400px;
-      margin-top: 20px;
-      background: #111;
-      padding: 15px;
-      border-radius: 8px;
-      min-height: 80px;
-      line-height: 1.4;
-      font-size: 15px;
-      white-space: pre-wrap;
-    }
-  </style>
+  .card {
+    background: var(--surface);
+    border-radius: var(--card-radius);
+    padding: var(--padding);
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  input, button {
+    font-size: 16px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    width: 100%;
+  }
+
+  input {
+    background: #222;
+    color: var(--on-surface);
+  }
+
+  button {
+    background: var(--primary);
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    background: #7affc8;
+  }
+
+  #output {
+    min-height: 100px;
+    background: #111;
+    padding: 12px;
+    border-radius: 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #cat {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+  }
+
+  .history-item {
+    color: var(--primary);
+    cursor: pointer;
+    text-decoration: underline;
+    margin-bottom: 6px;
+  }
+
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+
+  @media(max-width:480px){
+    h1{ font-size:2.2rem; }
+    p.subtitle{ font-size:0.9rem; }
+    p.notice{ font-size:0.8rem; }
+  }
+</style>
 </head>
 
 <body>
 
-  <h1>Lambo AI Search</h1>
+<h1>Lambo 🐾</h1>
+<p class="subtitle">Your friendly AI cat built on Gemini. Developed by Montry. Lambo is here to help you!</p>
+<p class="notice">This version of Lambo is specially made for the <strong>Nothing App</strong>. Visit: <a href="https://montryteam.github.io/app.montry.nothing/" style="color: var(--primary);" target="_blank">https://montryteam.github.io/app.montry.nothing/</a></p>
 
+<div class="card">
   <input id="apiKeyInput" type="text" placeholder="Enter your Gemini API Key" />
   <button onclick="saveApiKey()">Save API Key</button>
+</div>
 
-  <input id="searchInput" type="text" placeholder="Type a URL or ask Lambo..." />
+<div class="card">
+  <input id="searchInput" type="text" placeholder="Ask Lambo or enter a URL..." />
   <button onclick="runSearch()">Search</button>
+</div>
 
-  <div id="output"></div>
+<div class="card" id="output">
+  Lambo is waiting for your question... 🐾
+  <img id="cat" src="https://i.imgur.com/3oV1gOi.png" alt="Lambo Cat">
+</div>
 
-  <script>
-    // Load API key if saved
-    document.getElementById("apiKeyInput").value =
-      localStorage.getItem("lambo_api_key") || "";
+<div class="card" id="historyContainer"></div>
 
-    function saveApiKey() {
-      const key = document.getElementById("apiKeyInput").value.trim();
-      if (!key) {
-        alert("API key cannot be empty.");
-        return;
-      }
-      localStorage.setItem("lambo_api_key", key);
-      alert("API key saved successfully!");
+<script>
+const apiKeyInput = document.getElementById('apiKeyInput');
+apiKeyInput.value = localStorage.getItem('lambo_api_key') || '';
+
+const outputEl = document.getElementById('output');
+const historyContainer = document.getElementById('historyContainer');
+const cat = document.getElementById('cat');
+let history = [];
+
+function saveApiKey(){
+  const key = apiKeyInput.value.trim();
+  if(!key){ alert("API key cannot be empty."); return; }
+  localStorage.setItem('lambo_api_key', key);
+  alert("API key saved successfully!");
+}
+
+function addToHistory(query){
+  history.push(query);
+  historyContainer.innerHTML = "<strong>History:</strong><br>" +
+    history.map(q => `<div class="history-item" onclick="loadHistory('${q.replace(/'/g,'')}')">${q}</div>`).join('');
+}
+
+function loadHistory(q){
+  document.getElementById('searchInput').value = q;
+  runSearch();
+}
+
+function isUrl(text){
+  return /^https?:\/\//i.test(text) || (text.includes('.') && !text.includes(' '));
+}
+
+function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
+
+async function runSearch(){
+  const query = document.getElementById('searchInput').value.trim();
+  const apiKey = localStorage.getItem('lambo_api_key');
+
+  if(!apiKey){ outputEl.textContent = "Please enter your API Key first."; return; }
+  if(!query){ outputEl.textContent = "Please enter a question or URL."; return; }
+
+  addToHistory(query);
+
+  if(isUrl(query)){
+    let url = query.startsWith('http') ? query : 'https://' + query;
+    window.location.href = url;
+    return;
+  }
+
+  const aiQuestions = ["which ai","what ai","who is ai","tell me about ai","which artificial intelligence"];
+  if(aiQuestions.some(q => query.toLowerCase().includes(q))){
+    outputEl.textContent = "Hello! I am Lambo, a friendly AI cat built on Gemini. I'm here to help you! Developed by Montry.";
+    return;
+  }
+
+  outputEl.textContent = "";
+  cat.style.transform = "translateY(-5px)";
+
+  outputEl.textContent = "Lambo is thinking... 🐾";
+
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+
+  try{
+    const body = { contents:[{parts:[{text:query}]}] };
+    const res = await fetch(endpoint,{
+      method:'POST',
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(body)
+    });
+
+    const data = await res.json();
+    let responseText = "";
+
+    if(data.candidates){
+      responseText = data.candidates[0].content.parts[0].text;
+    } else { responseText = "Error: "+JSON.stringify(data); }
+
+    outputEl.textContent = "";
+    for(let i=0;i<responseText.length;i++){
+      outputEl.textContent += responseText[i];
+      await sleep(25);
     }
 
-    async function runSearch() {
-      const query = document.getElementById("searchInput").value.trim();
-      const apiKey = localStorage.getItem("lambo_api_key");
-      const output = document.getElementById("output");
+    cat.style.transform = "translateY(0)";
 
-      if (!apiKey) {
-        output.textContent = "Please enter your API key first.";
-        return;
-      }
+  } catch(err){
+    outputEl.textContent = "Request failed: " + err.message;
+    cat.style.transform = "translateY(0)";
+  }
+}
+</script>
 
-      // If query is a URL → redirect directly
-      if (query.startsWith("http://") || query.startsWith("https://")) {
-        window.location.href = query;
-        return;
-      }
-      if (query.includes(".") && !query.includes(" ")) {
-        window.location.href = "https://" + query;
-        return;
-      }
-
-      // AI Search (Gemini Flash-Lite)
-      const endpoint =
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" +
-        apiKey;
-
-      output.textContent = "Lambo is thinking...";
-
-      try {
-        const body = {
-          contents: [{ parts: [{ text: query }] }]
-        };
-
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        });
-
-        const data = await res.json();
-
-        if (data.candidates) {
-          output.textContent = data.candidates[0].content.parts[0].text;
-        } else {
-          output.textContent = "Error: " + JSON.stringify(data);
-        }
-      } catch (err) {
-        output.textContent = "Request failed: " + err.message;
-      }
-    }
-  </script>
 </body>
 </html>
