@@ -1,68 +1,490 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Privacy Policy</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0e0e0e;
-      color: #f2f2f2;
-      margin: 0;
-    }
-    .container {
-      max-width: 760px;
-      margin: auto;
-      padding: 42px 22px;
-    }
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 16px;
-    }
-    .card {
-      background: #161616;
-      border-radius: 14px;
-      padding: 26px;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
-    }
-    p {
-      line-height: 1.7;
-      opacity: .92;
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: .85rem;
-      opacity: .6;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lambo Search — Nothing App (Compatibility Mode)</title>
+<style>
+/* * Compatibility Focus: Using fixed values instead of CSS variables for older browsers.
+ * Design will degrade gracefully on older engines.
+ */
+body {
+    background: #000000; /* Strictly Black Background */
+    color: #ffffff;
+    font-family: Arial, sans-serif; /* Simpler font for compatibility */
+    padding: 18px;
+    display: -webkit-box; /* Webkit fallback for Flex */
+    display: -ms-flexbox; /* IE fallback for Flex */
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 12px;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 34px;
+    line-height: 1;
+    text-align: center;
+    width: 100%;
+    max-width: 420px;
+    /* Default Gradient (Modern Browsers Only) */
+    background: -webkit-linear-gradient(90deg, #6a00ff, #009dff);
+    background: linear-gradient(90deg, #6a00ff, #009dff);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* Text color for modern browsers */
+    /* Fallback for old browsers: plain blue color */
+    color: #6a00ff;
+    animation: logoIdle 6s ease-in-out infinite;
+    padding: 6px 0;
+}
+
+/* Animations for modern browsers only */
+@keyframes logoIdle {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+}
+@keyframes logoThink {
+    0% { background-position: 0% 50%; background-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); }
+    50% { background-position: 100% 50%; background-image: linear-gradient(90deg, violet, indigo, blue, green, yellow, orange, red); }
+    100% { background-position: 0% 50%; background-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); }
+}
+
+.subtitle, .byline {
+    color: #bfbfbf;
+    font-size: 14px;
+    text-align: center;
+    max-width: 420px;
+}
+
+.card, .result, .settingsBox {
+    width: 100%;
+    max-width: 420px;
+    background: #111111; /* surface */
+    border-radius: 26px; /* radius */
+    padding: 14px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6); /* shadow (modern only) */
+}
+
+.row, .feature-row, .controlRow {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 10px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+input[type="text"] {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    background: #0b0b0b;
+    color: #ffffff;
+    border-radius: 28px;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,0.03);
+    font-size: 15px;
+}
+
+button.btn, .settingsFloat {
+    background: #ffffff; /* Default button color */
+    color: #000000; /* Default button text color */
+    padding: 12px 14px;
+    border-radius: 28px;
+    border: 0;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s;
+    min-width: 48px;
+}
+.feature-btn.multi {
+    background: #6a00ff; 
+    color: #fff;
+}
+.settingsFloat {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    z-index: 60;
+}
+
+.overlay {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    z-index: 70;
+}
+
+/* Fallback for browsers that don't support transparent text clip */
+.logo:not([style*="transparent"]) {
+    color: #6a00ff; /* Solid color for old browsers */
+    background: none;
+}
+</style>
 </head>
 <body>
+<div class="logo" id="logo">LAMBO</div>
+<div class="subtitle">your friend & smart AI assistant 😺</div>
+<div class="byline">developed by <strong>Montry</strong> for <a href="#" style="color:#9ad6ff;text-decoration:underline">Nothing</a></div>
 
-<div class="container">
-  <h1>Privacy Policy</h1>
-
-  <div class="card">
-    <p>This app may temporarily process browsing data while using the built-in browser feature.</p>
-
-    <p>We do not collect, store, sell, or share any personal data.</p>
-
-    <p>All browsing data (such as visited pages, cache, and temporary files) 
-    is automatically deleted when you exit the browsing screen.</p>
-
-    <p>We do not require login credentials and we do not access your location, 
-    contacts, or any sensitive information.</p>
-
-    <p>No ads, no analytics tools, and no third-party trackers are used.</p>
-
-    <p>All processing happens locally on your device and no browsing data is sent to our servers.</p>
-  </div>
-
-  <div class="footer">
-    Last updated: 2025-11-28
-  </div>
+<div class="card">
+    <div class="row">
+        <input id="q" type="text" placeholder="ask lambo, prompt for image, or upload file... ✨" aria-label="search input" />
+        <button class="btn" id="goBtn">GO</button>
+    </div>
+    <div class="feature-row">
+        <button class="feature-btn multi" id="multiQueryBtn" title="Query All Enabled Models & Select Best Response">⚡ Multi-Query</button>
+        <button class="feature-btn" id="imageGenBtn" title="Generate Image">📷 Image</button>
+        <button class="feature-btn" id="uploadFileBtn" title="Upload File for Analysis">📎 File</button>
+        <input type="file" id="fileInput" style="display:none;" accept="*/*">
+    </div>
 </div>
 
-</body>
-</html>
+<div class="result" id="lamboResult">
+    <div class="sectionTitle">LAMBO vibe — AI answer</div>
+    <div class="lamboText" id="lamboText">Lambo is chillin' — drop a question or link above 😼 <span class="typingCursor"></span></div>
+</div>
+
+<div class="card" style="display:none;" id="fileAnalysisResult">
+    <div class="sectionTitle">FILE ANALYSIS 📂</div>
+    <div class="lamboText" id="fileAnalysisText">File analysis pending...</div>
+</div>
+
+<div class="card">
+    <div class="label">Search history ⏱️</div>
+    <div id="history" class="historyList muted">no history yet.</div>
+</div>
+
+<div class="settingsFloat" id="settingsBtn" title="settings">⚙</div>
+
+<div class="overlay" id="overlay">
+    <div class="settingsBox" role="dialog" aria-modal="true">
+        <div style="display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="font-weight:800;font-size:18px;">SETTINGS ⚡</div>
+            <div style="font-size:12px;color:#9d9d9d">Multi-Model Config</div>
+        </div>
+        
+        <div>
+            <div class="label">Primary Chat Engine 🧠</div>
+            <select id="primaryBotSelect" style="width:100%;padding:10px;border-radius:12px;border:none;background:#0a0a0a;color:#fff;">
+                <option value="gemini">Google Gemini (Chat/Multi-Modal)</option>
+                <option value="chatgpt">OpenAI ChatGPT (Chat)</option>
+                <option value="claude">Anthropic Claude (Chat)</option>
+            </select>
+        </div>
+        <div>
+            <div class="label">Primary AI Model (for 'GO' button) ⚙️</div>
+            <select id="aiModelSelect" style="width:100%;padding:10px;border-radius:12px;border:none;background:#0a0a0a;color:#fff;">
+                <option value="gemini">Google Gemini (Chat/Multi-Modal)</option>
+                <option value="chatgpt">OpenAI ChatGPT (Chat)</option>
+                <option value="claude">Anthropic Claude (Chat)</option>
+                <option value="cohere">Cohere Command (Chat)</option>
+                <option value="dalle">OpenAI DALL-E (Image Gen)</option>
+                <option value="stable">Stability Stable Diffusion (Image Gen)</option>
+            </select>
+        </div>
+        
+        <div class="key-input-group">
+            <div class="label">Enabled Models for Multi-Query</div>
+            <div class="muted" style="margin-bottom:8px;font-size:13px;color:#a7a7a7;">Check models to include in **Multi-Query** mode.</div>
+            <div id="modelCheckboxes" class="checkbox-container" style="display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;gap:6px;">
+                </div>
+        </div>
+
+        <div class="key-input-group">
+            <div class="label">API Keys Configuration 🔐</div>
+            <input id="geminiApiKey" type="text" placeholder="Gemini API Key" data-model="gemini" style="margin-top:8px;"/>
+            <input id="chatgptApiKey" type="text" placeholder="ChatGPT/DALL-E API Key (OpenAI)" data-model="chatgpt" style="margin-top:8px;"/>
+            <input id="claudeApiKey" type="text" placeholder="Claude API Key (Anthropic)" data-model="claude" style="margin-top:8px;"/>
+            <input id="cohereApiKey" type="text" placeholder="Cohere API Key" data-model="cohere" style="margin-top:8px;"/>
+            <input id="stableApiKey" type="text" placeholder="Stable Diffusion API Key (e.g., Stability AI)" data-model="stable" style="margin-top:8px;"/>
+        </div>
+
+        <div>
+            <div class="label">Button color 🎨</div>
+            <div class="controlRow">
+                <input id="btnColor" type="color" value="#ffffff" style="width:100px;"/>
+                <div style="-webkit-box-flex:1;-ms-flex:1;flex:1"><div class="muted" style="font-size:13px;color:#a7a7a7;">Changes GO/Settings button color</div></div>
+            </div>
+        </div>
+        
+        <div style="display:-webkit-box;display:-ms-flexbox;display:flex;gap:8px;">
+            <button class="btn" id="resetBtn" style="-webkit-box-flex:1;-ms-flex:1;flex:1;background:#222;color:#fff">Reset defaults</button>
+            <button class="btn" id="clearHistoryBtn" style="-webkit-box-flex:1;-ms-flex:1;flex:1;background:#222;color:#fff">Clear history</button>
+        </div>
+        <div style="display:-webkit-box;display:-ms-flexbox;display:flex;gap:8px;-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end">
+            <button class="btn" id="saveSettingsBtn" style="width:120px">Save</button>
+            <button class="btn" id="closeSettingsBtn" style="background:#222;color:#fff;width:120px">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// IMPORTANT: For Netscape or very old browsers, this entire script will likely fail 
+// due to lack of support for Promises, async/await, and modern APIs.
+// This code uses modern JS best practices and will gracefully degrade on older 
+// *supported* browsers (like IE11 or older versions of Chrome/Firefox).
+
+// Local Storage Keys
+const LS = {
+    model: 'LAMBO_CORE_MODEL',
+    primaryBot: 'LAMBO_PRIMARY_BOT', // New setting key
+    btnColor: 'LAMBO_BTN_COLOR',
+    enabledModels: 'LAMBO_ENABLED_MODELS',
+    apiKeys: 'LAMBO_API_KEYS',
+    history: 'LAMBO_HISTORY'
+};
+
+const DEFAULTS = {
+    model: 'gemini',
+    primaryBot: 'gemini', // Default primary chat bot
+    btnColor: '#ffffff',
+    enabledModels: ['gemini']
+};
+
+// Global State (using let/const/Array.from which should be widely supported)
+let CURRENT_MODEL = localStorage.getItem(LS.model) || DEFAULTS.model;
+let PRIMARY_BOT = localStorage.getItem(LS.primaryBot) || DEFAULTS.primaryBot; // New state variable
+let BTN_COLOR = localStorage.getItem(LS.btnColor) || DEFAULTS.btnColor;
+let ENABLED_MODELS = JSON.parse(localStorage.getItem(LS.enabledModels) || '["gemini"]');
+let API_KEYS = JSON.parse(localStorage.getItem(LS.apiKeys) || '{}');
+let HISTORY = JSON.parse(localStorage.getItem(LS.history) || '[]');
+
+// Model Definitions
+const ALL_MODELS = [
+    { id: 'gemini', name: 'Gemini', type: 'chat', keyElId: 'geminiApiKey' },
+    { id: 'chatgpt', name: 'ChatGPT', type: 'chat', keyElId: 'chatgptApiKey' },
+    { id: 'claude', name: 'Claude', type: 'chat', keyElId: 'claudeApiKey' },
+    { id: 'cohere', name: 'Cohere', type: 'chat', keyElId: 'cohereApiKey' },
+    { id: 'dalle', name: 'DALL-E', type: 'image', keyElId: 'chatgptApiKey' },
+    { id: 'stable', name: 'Stable Diffusion', type: 'image', keyElId: 'stableApiKey' }
+];
+
+// DOM Elements
+const qEl = document.getElementById('q');
+const goBtn = document.getElementById('goBtn');
+const lamboTextEl = document.getElementById('lamboText');
+const historyEl = document.getElementById('history');
+const settingsBtn = document.getElementById('settingsBtn');
+const overlay = document.getElementById('overlay');
+const aiModelSelect = document.getElementById('aiModelSelect');
+const primaryBotSelect = document.getElementById('primaryBotSelect'); // New element
+const btnColorInput = document.getElementById('btnColor');
+const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+const resetBtn = document.getElementById('resetBtn');
+const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+const logoEl = document.getElementById('logo');
+const uploadFileBtn = document.getElementById('uploadFileBtn');
+const fileInput = document.getElementById('fileInput');
+const imageGenBtn = document.getElementById('imageGenBtn');
+const multiQueryBtn = document.getElementById('multiQueryBtn');
+const modelCheckboxesEl = document.getElementById('modelCheckboxes');
+const fileAnalysisResult = document.getElementById('fileAnalysisResult');
+const fileAnalysisText = document.getElementById('fileAnalysisText');
+
+// --- Initialization ---
+
+function initSettings() {
+    aiModelSelect.value = CURRENT_MODEL;
+    primaryBotSelect.value = PRIMARY_BOT; // Initialize new selection
+    btnColorInput.value = BTN_COLOR;
+    applyButtonColor(BTN_COLOR);
+
+    // Populate API Key fields and Checkboxes
+    ALL_MODELS.forEach(model => {
+        const keyEl = document.getElementById(model.keyElId);
+        if (keyEl) {
+            // Check both model-specific key (API_KEYS[gemini]) and generalized key (API_KEYS[geminiApiKey])
+            const storedKey = API_KEYS[model.id] || API_KEYS[model.keyElId.replace('ApiKey', '')];
+            keyEl.value = storedKey || '';
+        }
+        
+        // Create checkboxes for Multi-Query
+        const isChecked = ENABLED_MODELS.includes(model.id);
+        const keyInfo = model.keyElId === 'chatgptApiKey' ? ' (Uses OpenAI Key)' : '';
+        // Using simpler HTML for compatibility
+        const html = '<label style="display:flex;gap:10px;align-items:center;">' +
+                     '<input type="checkbox" id="check_' + model.id + '" value="' + model.id + '" ' + (isChecked ? 'checked' : '') + '>' +
+                     '<span style="font-size:13px;">' + model.name + ' (' + model.type.toUpperCase() + ')' + keyInfo + '</span>' +
+                     '</label>';
+        modelCheckboxesEl.insertAdjacentHTML('beforeend', html);
+    });
+    renderHistory();
+}
+
+// --- Utility Functions ---
+
+function applyButtonColor(c) {
+    // Fallback for older browsers: use inline style directly
+    goBtn.style.backgroundColor = c;
+    settingsBtn.style.backgroundColor = c;
+    
+    // Calculate contrast text color manually (simpler method)
+    var rgb = c.replace('#',''); 
+    var r=parseInt(rgb.substring(0,2),16),g=parseInt(rgb.substring(2,4),16),b=parseInt(rgb.substring(4,6),16); 
+    var lum=0.2126*r+0.7152*g+0.0722*b; 
+    var fg=lum>150?'#000':'#fff'; 
+    
+    goBtn.style.color = fg;
+    settingsBtn.style.color = fg;
+    
+    // Multi-Query button keeps its distinct style
+    multiQueryBtn.style.backgroundColor = '#6a00ff';
+    multiQueryBtn.style.color = '#fff'; 
+}
+
+function setThinking(state) {
+    if (state) {
+        logoEl.style.animation = 'logoThink 3s infinite';
+        logoEl.style.backgroundImage = 'linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)'; 
+        logoEl.style.color = 'transparent'; // Ensure transparent text for effect
+    } else {
+        logoEl.style.animation = 'logoIdle 6s ease-in-out infinite';
+        logoEl.style.backgroundImage = 'linear-gradient(90deg,#6a00ff,#009dff)'; 
+        logoEl.style.color = 'transparent'; 
+    }
+}
+
+function typeText(el, text, delay) {
+    delay = delay || 20;
+    return new Promise(function(resolve) {
+        el.innerHTML = '';
+        var cursor = document.createElement('span');
+        cursor.classList.add('typingCursor');
+        var i = 0;
+        
+        function step() {
+            if (i < text.length) {
+                if (!el.contains(cursor)) {
+                    el.appendChild(cursor);
+                }
+
+                // Simplified handling for compatibility
+                if (text.substring(i, i+2) === '\n\n') {
+                    el.insertBefore(document.createElement('br'), cursor);
+                    el.insertBefore(document.createElement('br'), cursor);
+                    i += 2;
+                } 
+                else if (text.substring(i, i+2) === '**') {
+                    var closingIndex = text.indexOf('**', i + 2);
+                    if (closingIndex !== -1) {
+                        var boldText = text.substring(i + 2, closingIndex);
+                        var strongEl = document.createElement('strong');
+                        strongEl.textContent = boldText;
+                        el.insertBefore(strongEl, cursor);
+                        i = closingIndex + 2;
+                    } else {
+                        el.insertBefore(document.createTextNode(text[i++]), cursor);
+                    }
+                } 
+                else {
+                    el.insertBefore(document.createTextNode(text[i++]), cursor);
+                }
+                
+                setTimeout(step, delay);
+            } else {
+                if (el.contains(cursor)) {
+                    cursor.remove();
+                }
+                resolve();
+            }
+        }
+        step();
+    });
+}
+
+function toast(msg){
+    var el=document.createElement('div'); el.textContent=msg; 
+    el.style.cssText = 'position:fixed;left:50%;-webkit-transform:translateX(-50%);-ms-transform:translateX(-50%);transform:translateX(-50%);bottom:90px;background:#222;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:100;opacity:1;-webkit-transition:opacity 0.5s;transition:opacity 0.5s;';
+    document.body.appendChild(el); 
+    setTimeout(function(){el.style.opacity='0';},1600); 
+    setTimeout(function(){el.remove();},2200);
+}
+
+function pushHistory(q){
+    if(!q || q.startsWith('Image generation request') || q.startsWith('File selected') || q.startsWith('[Multi-Query]')) return; 
+    HISTORY.unshift({q:q,ts:Date.now()}); 
+    if(HISTORY.length>50)HISTORY.pop(); 
+    try{localStorage.setItem(LS.history,JSON.stringify(HISTORY));}catch(e){} 
+    renderHistory();
+}
+
+function renderHistory(){
+    if(!HISTORY||HISTORY.length===0){
+        historyEl.innerHTML='<div style="color:#a7a7a7;">no history yet ✨</div>'; 
+        return;
+    } 
+    var html = HISTORY.map(function(h){
+        return '<div class="historyItem" onclick="repaste(\'' + escapeForAttr(h.q) + '\')">' + h.q + '</div>';
+    }).join('');
+    historyEl.innerHTML=html;
+}
+
+function escapeForAttr(s){return s.replace(/'/g,"\\'").replace(/"/g,'\\"');}
+
+window.repaste = function(q){
+    qEl.value=q; 
+    mainAction(); 
+}
+
+// --- Settings Actions ---
+
+function saveSettings(){
+    CURRENT_MODEL = aiModelSelect.value;
+    PRIMARY_BOT = primaryBotSelect.value; // Save new primary bot setting
+    BTN_COLOR = btnColorInput.value;
+    
+    API_KEYS = {};
+    document.querySelectorAll('[data-model]').forEach(function(input) {
+        API_KEYS[input.dataset.model] = input.value.trim();
+    });
+
+    ENABLED_MODELS = [];
+    document.querySelectorAll('#modelCheckboxes input[type="checkbox"]:checked').forEach(function(checkbox) {
+        ENABLED_MODELS.push(checkbox.value);
+    });
+
+    try {
+        localStorage.setItem(LS.model, CURRENT_MODEL);
+        localStorage.setItem(LS.primaryBot, PRIMARY_BOT); // Save new setting
+        localStorage.setItem(LS.btnColor, BTN_COLOR);
+        localStorage.setItem(LS.apiKeys, JSON.stringify(API_KEYS));
+        localStorage.setItem(LS.enabledModels, JSON.stringify(ENABLED_MODELS));
+    } catch(e) {
+        toast('Warning: Local Storage not available.');
+    }
+
+    applyButtonColor(BTN_COLOR);
+    overlay.style.display='none';
+    toast('Settings saved ✨');
+}
+
+function resetDefaults(){
+    aiModelSelect.value=DEFAULTS.model;
+    primaryBotSelect.value=DEFAULTS.primaryBot; // Reset new setting
+    btnColorInput.value=DEFAULT
