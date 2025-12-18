@@ -1,4 +1,8 @@
 # Montry Nothing
+assets/icon.png
+
+
+
 Nothing has never been this fun 😎
 
 This app starts with one simple word: Nothing.
