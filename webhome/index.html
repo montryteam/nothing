@@ -1,381 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Lambo AI Chat</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lambo Search — Nothing App</title>
+
+<!-- Google Programmable Search -->
+<script async src="https://cse.google.com/cse.js?cx=f015436e565c94c8d"></script>
 
 <style>
 :root{
   --bg:#0f1115;
   --primary:#e4e6eb;
-  --surface:rgba(26,28,34,0.6);
-  --surface-strong:rgba(26,28,34,0.85);
+  --glass:rgba(255,255,255,0.08);
+  --glass-border:rgba(255,255,255,0.15);
+  --blur:18px;
   --radius:28px;
-  --blur:blur(18px);
-  --shadow:0 20px 40px rgba(0,0,0,.6);
+  --shadow:0 20px 40px rgba(0,0,0,0.55);
+  --btn-bg:#e4e6eb;
+  --btn-fg:#000;
 }
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
 body{
-  min-height:100vh;
   background:var(--bg);
   color:var(--primary);
-  display:flex;
-  justify-content:center;
-  padding:16px;
-  background-size:cover;
-  background-position:center;
-}
-
-.app{
-  width:100%;
-  max-width:520px;
+  font-family:Inter,system-ui,Arial,sans-serif;
+  padding:18px;
   display:flex;
   flex-direction:column;
+  align-items:center;
   gap:14px;
+  overflow-x:hidden;
 }
 
-/* Header */
-.header{
-  text-align:center;
+/* Dynamic Bing background */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  z-index:-2;
+  opacity:0;
+  transition:opacity 1.5s ease;
 }
-.title{
-  font-size:2.6rem;
-  font-weight:800;
-  background:linear-gradient(120deg,#4f8cff,#a855f7);
-  background-size:400% 400%;
+body.bg-active::before{opacity:0.35}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  background:linear-gradient(to bottom,rgba(15,17,21,0.9),rgba(15,17,21,0.95));
+  z-index:-1;
+}
+
+/* Logo */
+.logo{
+  font-weight:900;
+  font-size:34px;
+  background:linear-gradient(120deg,#5b7cff,#8b5cf6);
+  background-size:300% 300%;
   -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:gradIdle 8s ease infinite;
+  background-clip:text;
+  color:transparent;
+  animation:logoIdle 6s ease-in-out infinite;
 }
-.thinking{
-  background:linear-gradient(120deg,red,orange,yellow,green,cyan,blue,purple);
-  background-size:600% 600%;
-  animation:gradThink 2s linear infinite;
-}
-@keyframes gradIdle{
+@keyframes logoIdle{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
-@keyframes gradThink{
-  0%{background-position:0% 50%}
-  100%{background-position:100% 50%}
+@keyframes logoThink{
+  0%{background-position:0% 50%;filter:hue-rotate(0deg)}
+  50%{background-position:100% 50%;filter:hue-rotate(180deg)}
+  100%{background-position:0% 50%;filter:hue-rotate(360deg)}
 }
+
 .subtitle{
-  opacity:.8;
-  font-size:.95rem;
+  font-size:14px;
+  opacity:.85;
+  text-align:center;
 }
+.byline{
+  font-size:13px;
+  opacity:.7;
+}
+.byline a{color:#9ad6ff;text-decoration:underline}
 
 /* Glass cards */
 .card{
-  background:var(--surface);
-  backdrop-filter:var(--blur);
+  width:100%;
+  max-width:420px;
+  background:var(--glass);
+  backdrop-filter:blur(var(--blur));
+  -webkit-backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-border);
   border-radius:var(--radius);
+  padding:14px;
   box-shadow:var(--shadow);
 }
 
-/* Chat */
-.chat{
+/* Search */
+.row{display:flex;gap:10px}
+input[type="text"]{
   flex:1;
-  padding:14px;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.msg{
-  max-width:78%;
-  padding:12px 14px;
-  border-radius:22px;
-  animation:fadeUp .25s ease;
-}
-.user{
-  background:var(--primary);
-  color:#000;
-  align-self:flex-end;
-}
-.bot{
-  background:rgba(255,255,255,.08);
-}
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:none}
-}
-
-/* Typing */
-.typing{
-  display:none;
-  gap:6px;
-  padding-left:6px;
-}
-.typing span{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--primary);
-  animation:bounce .6s infinite alternate;
-}
-.typing span:nth-child(2){animation-delay:.15s}
-.typing span:nth-child(3){animation-delay:.3s}
-@keyframes bounce{
-  from{transform:translateY(0);opacity:.5}
-  to{transform:translateY(-8px);opacity:1}
-}
-
-/* Input */
-.inputBar{
-  display:flex;
-  gap:10px;
-}
-.inputBar input{
-  flex:1;
-  padding:14px;
-  border-radius:22px;
-  border:none;
-  outline:none;
-  background:rgba(255,255,255,.08);
+  background:rgba(0,0,0,0.35);
   color:var(--primary);
+  border-radius:32px;
+  padding:14px 16px;
+  border:1px solid rgba(255,255,255,0.1);
+  font-size:15px;
 }
-.inputBar button{
-  padding:0 20px;
-  border-radius:22px;
+button.btn{
+  background:var(--btn-bg);
+  color:var(--btn-fg);
   border:none;
-  background:var(--primary);
-  color:#000;
-  font-weight:700;
+  border-radius:32px;
+  padding:14px 18px;
+  font-weight:800;
   cursor:pointer;
+}
+
+/* Results */
+.result{
+  width:100%;
+  max-width:420px;
+  background:var(--glass);
+  backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:14px;
+  box-shadow:var(--shadow);
+}
+.sectionTitle{
+  font-size:13px;
+  font-weight:800;
+  opacity:.9;
+  margin-bottom:6px;
+}
+.lamboText{font-size:15px;line-height:1.5;white-space:pre-wrap}
+
+/* History & shortcuts */
+.list{display:flex;flex-direction:column;gap:8px}
+.item{
+  font-size:13px;
+  opacity:.9;
+  cursor:pointer;
+  text-decoration:underline;
 }
 
 /* Floating settings */
 .settingsBtn{
   position:fixed;
-  bottom:20px;
-  right:20px;
-  width:52px;
-  height:52px;
-  border-radius:14px;
-  border:none;
-  background:var(--primary);
-  color:#000;
+  right:18px;
+  bottom:18px;
+  width:58px;
+  height:58px;
+  border-radius:16px;
+  background:var(--btn-bg);
+  color:var(--btn-fg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-size:22px;
   box-shadow:var(--shadow);
   cursor:pointer;
 }
 
 /* Settings modal */
-.modal{
+.overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,.75);
   display:none;
   align-items:center;
   justify-content:center;
-  z-index:1000;
+  z-index:50;
 }
-.modalBox{
+.settings{
   width:92%;
-  max-width:380px;
-  background:var(--surface-strong);
-  backdrop-filter:var(--blur);
-  border-radius:26px;
-  padding:18px;
+  max-width:420px;
+  background:var(--glass);
+  backdrop-filter:blur(24px);
+  border:1px solid var(--glass-border);
+  border-radius:24px;
+  padding:16px;
   display:flex;
   flex-direction:column;
   gap:12px;
 }
-.modalBox input{
+.label{font-size:13px;font-weight:800}
+select,input[type="color"]{
   width:100%;
   padding:10px;
-  border-radius:16px;
+  border-radius:14px;
   border:none;
-  background:rgba(255,255,255,.1);
+  background:rgba(0,0,0,.4);
   color:var(--primary);
 }
-.modalBox label{font-size:.85rem;opacity:.8}
-.modalBox button{
-  padding:10px;
-  border-radius:18px;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-}
+.small{font-size:12px;opacity:.75}
 
-/* Shortcuts */
-.shortcuts{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-}
-.shortcut{
-  padding:8px 12px;
-  background:rgba(255,255,255,.12);
-  border-radius:14px;
-  cursor:pointer;
-  white-space:nowrap;
+/* Google */
+.gcse-search{background:transparent!important}
+
+@media(max-width:420px){
+  .logo{font-size:28px}
 }
 </style>
 </head>
 
 <body>
-<div class="app">
-  <div class="header">
-    <div id="lamboTitle" class="title">Lambo</div>
-    <div class="subtitle">your chill AI cat friend 🐱</div>
-  </div>
+<div class="logo" id="logo">LAMBO</div>
+<div class="subtitle">your friend & smart AI assistant 😺</div>
+<div class="byline">developed by <strong>Montry</strong> for <a href="https://montryteam.github.io/app.montry.nothing/" target="_blank">Nothing</a></div>
 
-  <div id="shortcuts" class="shortcuts"></div>
-
-  <div id="chat" class="chat card"></div>
-
-  <div id="typing" class="typing">
-    <span></span><span></span><span></span>
-  </div>
-
-  <div class="inputBar">
-    <input id="input" placeholder="Talk to Lambo..." />
-    <button onclick="send()">Send</button>
+<!-- Search -->
+<div class="card">
+  <div class="row">
+    <input id="q" type="text" placeholder="ask Lambo or paste a link..." />
+    <button class="btn" id="go">GO</button>
   </div>
 </div>
 
-<button class="settingsBtn" onclick="openSettings()">⚙️</button>
+<!-- Lambo result -->
+<div class="result" id="lamboBox">
+  <div class="sectionTitle">LAMBO AI</div>
+  <div class="lamboText" id="lamboText">Lambo is chilling… 😼</div>
+</div>
+
+<!-- Google -->
+<div class="result" id="googleBox">
+  <div class="sectionTitle">GOOGLE RESULTS</div>
+  <div class="gcse-search"></div>
+  <button class="btn" id="openGoogle" style="margin-top:8px;width:100%;display:none">Open in Google 🌐</button>
+</div>
+
+<!-- Shortcuts -->
+<div class="card">
+  <div class="sectionTitle">SHORTCUTS ⚡</div>
+  <div id="shortcuts" class="list small">no shortcuts yet.</div>
+</div>
+
+<!-- History -->
+<div class="card">
+  <div class="sectionTitle">HISTORY ⏱️</div>
+  <div id="history" class="list small">no history yet.</div>
+</div>
 
 <!-- Settings -->
-<div id="settings" class="modal">
-  <div class="modalBox">
-    <h3>Settings ⚙️</h3>
+<div class="settingsBtn" id="openSettings">⚙</div>
+<div class="overlay" id="overlay">
+  <div class="settings">
+    <div class="label">API key (Gemini)</div>
+    <input id="apiKey" type="text" placeholder="paste Gemini API key" />
+    <div class="small"><a href="https://aistudio.google.com/app/apikey" target="_blank">Get API key</a></div>
 
-    <label>Gemini API Key</label>
-    <input id="apiGemini" placeholder="Paste key here"/>
-    <small>Get it from <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a></small>
+    <div class="label">Search source</div>
+    <select id="source">
+      <option value="both">Lambo + Google</option>
+      <option value="lambo">Lambo only</option>
+      <option value="google">Google only</option>
+    </select>
 
-    <label>
-      <input type="checkbox" id="bingBg"/> Daily Bing background
-    </label>
+    <div class="label">Google mode</div>
+    <select id="googleMode">
+      <option value="cse">Programmable Search</option>
+      <option value="link">Open Google link</option>
+    </select>
 
-    <label>Add shortcut (name | url)</label>
-    <input id="shortcutInput" placeholder="YouTube | https://youtube.com"/>
+    <div class="label">Button color</div>
+    <input type="color" id="btnColor" value="#e4e6eb"/>
 
-    <button onclick="saveSettings()">Save</button>
-    <button onclick="closeSettings()">Close</button>
+    <div class="label">Daily Bing background</div>
+    <select id="bingBg">
+      <option value="off">Disabled (default)</option>
+      <option value="on">Enabled</option>
+    </select>
+
+    <div class="label">Add shortcut</div>
+    <input id="shortcutInput" type="text" placeholder="example.com"/>
+
+    <div style="display:flex;gap:8px">
+      <button class="btn" id="save">Save</button>
+      <button class="btn" id="reset" style="background:#222;color:#fff">Reset</button>
+    </div>
   </div>
 </div>
 
 <script>
-/* ---------- Storage ---------- */
-const store = {
-  get:k=>JSON.parse(localStorage.getItem(k)),
-  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
+/* ---------- State ---------- */
+const LS={
+ api:'lambo_api',src:'lambo_src',gmode:'lambo_gmode',
+ btn:'lambo_btn',hist:'lambo_hist',short:'lambo_short',bing:'lambo_bing'
 };
+let API=localStorage.getItem(LS.api)||'';
+let SRC=localStorage.getItem(LS.src)||'both';
+let GMODE=localStorage.getItem(LS.gmode)||'cse';
+let BTN=localStorage.getItem(LS.btn)||'#e4e6eb';
+let HIST=JSON.parse(localStorage.getItem(LS.hist)||'[]');
+let SHORT=JSON.parse(localStorage.getItem(LS.short)||'[]');
+let BING=localStorage.getItem(LS.bing)||'off';
+
+/* ---------- Elements ---------- */
+const q=document.getElementById('q'),go=document.getElementById('go'),
+logo=document.getElementById('logo'),
+lamboText=document.getElementById('lamboText'),
+lamboBox=document.getElementById('lamboBox'),
+googleBox=document.getElementById('googleBox'),
+openGoogle=document.getElementById('openGoogle'),
+histEl=document.getElementById('history'),
+shortEl=document.getElementById('shortcuts');
 
 /* ---------- Init ---------- */
-const chat=document.getElementById("chat");
-const input=document.getElementById("input");
-const typing=document.getElementById("typing");
-const title=document.getElementById("lamboTitle");
+document.documentElement.style.setProperty('--btn-bg',BTN);
+document.getElementById('apiKey').value=API;
+document.getElementById('source').value=SRC;
+document.getElementById('googleMode').value=GMODE;
+document.getElementById('btnColor').value=BTN;
+document.getElementById('bingBg').value=BING;
+renderHistory();renderShortcuts();
+if(BING==='on') loadBing();
 
-let apiKey=store.get("geminiKey")||"";
-let shortcuts=store.get("shortcuts")||[];
-let bingBg=store.get("bingBg")||false;
+/* ---------- Events ---------- */
+go.onclick=search;
+q.onkeydown=e=>{if(e.key==='Enter')search()};
+document.getElementById('openSettings').onclick=()=>overlay.style.display='flex';
+document.getElementById('save').onclick=save;
+document.getElementById('reset').onclick=reset;
 
-renderShortcuts();
-if(bingBg) loadBing();
+/* ---------- Functions ---------- */
+function search(){
+ const text=q.value.trim();
+ if(!text)return;
+ if(text.startsWith('http')|| (text.includes('.')&&!text.includes(' '))){
+   location.href=text.startsWith('http')?text:'https://'+text;return;
+ }
+ HIST.unshift(text);localStorage.setItem(LS.hist,JSON.stringify(HIST));
+ renderHistory();
 
-/* ---------- Chat ---------- */
-function add(role,text){
-  const d=document.createElement("div");
-  d.className=`msg ${role}`;
-  d.innerHTML=text;
-  chat.appendChild(d);
-  chat.scrollTop=chat.scrollHeight;
+ if(SRC!=='google'){runLambo(text)}else lamboBox.style.display='none';
+ if(SRC!=='lambo'){runGoogle(text)}else googleBox.style.display='none';
 }
 
-async function send(){
-  const q=input.value.trim();
-  if(!q) return;
-  input.value="";
-  add("user",q);
-
-  if(q.startsWith("http")){
-    window.location.href=q;
-    return;
-  }
-
-  if(!apiKey){
-    add("bot","⚠️ Add your Gemini API key in settings.");
-    return;
-  }
-
-  typing.style.display="flex";
-  title.classList.add("thinking");
-
-  try{
-    const res=await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+apiKey,
-      {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({contents:[{parts:[{text:q}]}]})
-      }
-    );
-    const data=await res.json();
-    const text=data.candidates?.[0]?.content?.parts?.[0]?.text||"Error.";
-    add("bot",text);
-  }catch{
-    add("bot","Something went wrong 😿");
-  }
-
-  typing.style.display="none";
-  title.classList.remove("thinking");
-}
-
-/* ---------- Settings ---------- */
-function openSettings(){
-  document.getElementById("settings").style.display="flex";
-  document.getElementById("apiGemini").value=apiKey;
-  document.getElementById("bingBg").checked=bingBg;
-}
-function closeSettings(){
-  document.getElementById("settings").style.display="none";
-}
-function saveSettings(){
-  apiKey=document.getElementById("apiGemini").value.trim();
-  bingBg=document.getElementById("bingBg").checked;
-  store.set("geminiKey",apiKey);
-  store.set("bingBg",bingBg);
-
-  const sc=document.getElementById("shortcutInput").value;
-  if(sc.includes("|")){
-    const [name,url]=sc.split("|").map(s=>s.trim());
-    shortcuts.push({name,url});
-    store.set("shortcuts",shortcuts);
-    renderShortcuts();
-  }
-  if(bingBg) loadBing();
-  closeSettings();
-}
-
-/* ---------- Shortcuts ---------- */
-function renderShortcuts(){
-  const box=document.getElementById("shortcuts");
-  box.innerHTML="";
-  shortcuts.forEach(s=>{
-    const d=document.createElement("div");
-    d.className="shortcut";
-    d.textContent=s.name;
-    d.onclick=()=>window.open(s.url,"_blank");
-    box.appendChild(d);
+async function runLambo(t){
+ if(!API){lamboText.textContent='add API key in settings ⚙';return}
+ lamboBox.style.display='block';
+ logo.style.animation='logoThink 3s infinite';
+ lamboText.textContent='thinking… 🌈';
+ try{
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API}`,{
+   method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({contents:[{parts:[{text:`You are Lambo, a friendly AI cat built on Gemini by Montry. Keep it short. User: ${t}`}]}]})
   });
+  const d=await r.json();
+  lamboText.textContent=d.candidates?.[0]?.content?.parts?.[0]?.text||'no answer 😿';
+ }catch{lamboText.textContent='error 😿'}
+ logo.style.animation='logoIdle 6s infinite';
 }
 
-/* ---------- Bing Background ---------- */
+function runGoogle(t){
+ googleBox.style.display='block';
+ if(GMODE==='link'){
+  openGoogle.style.display='block';
+  openGoogle.onclick=()=>window.open('https://www.google.com/search?q='+encodeURIComponent(t),'_blank');
+ }else{
+  openGoogle.style.display='none';
+ }
+}
+
+function renderHistory(){
+ histEl.innerHTML=HIST.length?HIST.map(h=>`<div class="item" onclick="q.value='${h}';search()">${h}</div>`).join(''):'no history yet.';
+}
+function renderShortcuts(){
+ shortEl.innerHTML=SHORT.length?SHORT.map(s=>`<div class="item" onclick="location.href='https://${s}'">${s}</div>`).join(''):'no shortcuts yet.';
+}
+
+function save(){
+ API=document.getElementById('apiKey').value.trim();
+ SRC=document.getElementById('source').value;
+ GMODE=document.getElementById('googleMode').value;
+ BTN=document.getElementById('btnColor').value;
+ BING=document.getElementById('bingBg').value;
+ const sc=document.getElementById('shortcutInput').value.trim();
+ if(sc)SHORT.push(sc);
+ localStorage.setItem(LS.api,API);
+ localStorage.setItem(LS.src,SRC);
+ localStorage.setItem(LS.gmode,GMODE);
+ localStorage.setItem(LS.btn,BTN);
+ localStorage.setItem(LS.short,JSON.stringify(SHORT));
+ localStorage.setItem(LS.bing,BING);
+ document.documentElement.style.setProperty('--btn-bg',BTN);
+ if(BING==='on')loadBing();else document.body.classList.remove('bg-active');
+ renderShortcuts();
+ overlay.style.display='none';
+}
+
+function reset(){
+ localStorage.clear();location.reload();
+}
+
 async function loadBing(){
-  try{
-    const r=await fetch("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1");
-    const j=await r.json();
-    document.body.style.backgroundImage=
-      `url(https://www.bing.com${j.images[0].url})`;
-  }catch{}
+ try{
+  const r=await fetch('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1');
+  const d=await r.json();
+  document.body.style.setProperty('--bing','url(https://www.bing.com'+d.images[0].url+')');
+  document.body.style.setProperty('background-image','var(--bing)');
+  document.body.classList.add('bg-active');
+ }catch{}
 }
 </script>
 </body>
