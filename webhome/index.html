@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lambo Glass Search — Nothing App</title>
+<title>Lambo  — Nothing App</title>
 <script async src="https://cse.google.com/cse.js?cx=f015436e565c94c8d"></script>
 <style>
 :root{
@@ -46,7 +46,7 @@ select,input[type="color"]{padding:10px;border-radius:12px;border:none;backgroun
 <body>
 <div class="logo" id="logo">LAMBO</div>
 <div class="subtitle">your friend & smart AI assistant 😺</div>
-<div class="byline">developed by <strong>Montry</strong> for <a href="https://montryteam.github.io/app.montry.nothing/" target="_blank" style="color:#9ad6ff;text-decoration:underline">Nothing</a></div>
+<div class="byline">developed by <strong>Montry</strong> for <a href="https://montryteam.github.io/nothing/" target="_blank" style="color:#9ad6ff;text-decoration:underline">Nothing</a></div>
 
 <div class="card">
 <div class="row">
@@ -54,7 +54,6 @@ select,input[type="color"]{padding:10px;border-radius:12px;border:none;backgroun
 <button class="btn" id="goBtn">GO</button>
 </div>
 <div style="margin-top:10px; display:flex; gap:8px;">
-<button class="btn" id="micBtn">🎤</button>
 <button class="btn" id="clearBtn" title="clear input">✖</button>
 </div>
 </div>
@@ -141,7 +140,7 @@ let HISTORY=JSON.parse(localStorage.getItem(LS.history)||'[]');
 let SHORTCUTS=JSON.parse(localStorage.getItem(LS.shortcuts)||'[]');
 
 const qEl=document.getElementById('q'),goBtn=document.getElementById('goBtn'),lamboTextEl=document.getElementById('lamboText'),googleResultsContainer=document.getElementById('googleResultsContainer'),historyEl=document.getElementById('history');
-const settingsBtn=document.getElementById('settingsBtn'),overlay=document.getElementById('overlay'),apiKeyInput=document.getElementById('apiKeyInput'),btnColorInput=document.getElementById('btnColor'),searchSourceSelect=document.getElementById('searchSource'),googleModeSelect=document.getElementById('googleMode'),saveSettingsBtn=document.getElementById('saveSettingsBtn'),closeSettingsBtn=document.getElementById('closeSettingsBtn'),resetBtn=document.getElementById('resetBtn'),clearHistoryBtn=document.getElementById('clearHistoryBtn'),clearInputBtn=document.getElementById('clearBtn'),micBtn=document.getElementById('micBtn'),openGoogleBtn=document.getElementById('openGoogleBtn');
+const settingsBtn=document.getElementById('settingsBtn'),overlay=document.getElementById('overlay'),apiKeyInput=document.getElementById('apiKeyInput'),btnColorInput=document.getElementById('btnColor'),searchSourceSelect=document.getElementById('searchSource'),googleModeSelect=document.getElementById('googleMode'),saveSettingsBtn=document.getElementById('saveSettingsBtn'),closeSettingsBtn=document.getElementById('closeSettingsBtn'),resetBtn=document.getElementById('resetBtn'),clearHistoryBtn=document.getElementById('clearHistoryBtn'),clearInputBtn=document.getElementById('clearBtn'),openGoogleBtn=document.getElementById('openGoogleBtn');
 const shortcutInput=document.getElementById('shortcutInput'),addShortcutBtn=document.getElementById('addShortcutBtn'),shortcutsListEl=document.getElementById('shortcutsList');
 
 apiKeyInput.value=API_KEY; btnColorInput.value=BTN_COLOR; searchSourceSelect.value=SEARCH_SOURCE; googleModeSelect.value=GOOGLE_MODE; applyButtonColor(BTN_COLOR);
@@ -151,12 +150,12 @@ goBtn.addEventListener('click',mainSearch);
 qEl.addEventListener('keydown',e=>{if(e.key==='Enter') mainSearch()});
 settingsBtn.addEventListener('click',()=>overlay.style.display='flex'); closeSettingsBtn.addEventListener('click',()=>overlay.style.display='none');
 saveSettingsBtn.addEventListener('click',saveSettings); resetBtn.addEventListener('click',resetDefaults); clearHistoryBtn.addEventListener('click',clearHistory);
-clearInputBtn.addEventListener('click',()=>qEl.value=''); micBtn.addEventListener('click',()=>{});
+clearInputBtn.addEventListener('click',()=>qEl.value='');
 addShortcutBtn.addEventListener('click',addShortcut);
 
 function applyButtonColor(c){document.documentElement.style.setProperty('--button-bg',c); const rgb=c.replace('#',''); const r=parseInt(rgb.substring(0,2),16),g=parseInt(rgb.substring(2,4),16),b=parseInt(rgb.substring(4,6),16); const lum=0.2126*r+0.7152*g+0.0722*b; const fg=lum>150?'#000':'#fff'; document.documentElement.style.setProperty('--button-fg',fg);}
 
-function saveSettings(){API_KEY=apiKeyInput.value.trim(); BTN_COLOR=btnColorInput.value; SEARCH_SOURCE=searchSourceSelect.value; GOOGLE_MODE=googleModeSelect.value; localStorage.setItem(LS.apiKey,API_KEY); localStorage.setItem(LS.btnColor,BTN_COLOR); localStorage.setItem(LS.searchSource,SEARCH_SOURCE); localStorage.setItem(LS.googleMode,GOOGLE_MODE); applyButtonColor(BTN_COLOR); overlay.style.display='none'; toast('Settings saved ✨');}
+function saveSettings(){API_KEY=apiKeyInput.value.trim(); BTN_COLOR=btnColorInput.value; SEARCH_SOURCE=searchSourceSelect.value; GOOGLE_MODE=googleModeSelect.value; localStorage.setItem(LS.apiKey,API_KEY); localStorage.setItem(LS.btnColor,BTN_COLOR); localStorage.setItem(LS.searchSource,SEARCH_SOURCE); localStorage.setItem(LS.googleMode,GOOGLE_MODE); applyButtonColor(BTN_COLOR); toast('Settings saved ✨'); overlay.style.display='none';}
 
 function resetDefaults(){apiKeyInput.value='';btnColorInput.value=DEFAULTS.btnColor;searchSourceSelect.value=DEFAULTS.searchSource;googleModeSelect.value=DEFAULTS.googleMode;localStorage.removeItem(LS.apiKey);localStorage.removeItem(LS.btnColor);localStorage.removeItem(LS.searchSource);localStorage.removeItem(LS.googleMode);API_KEY='';BTN_COLOR=DEFAULTS.btnColor;SEARCH_SOURCE=DEFAULTS.searchSource;GOOGLE_MODE=DEFAULTS.googleMode;applyButtonColor(BTN_COLOR);toast('Settings reset 🔁');}
 
@@ -171,89 +170,64 @@ function addShortcut(){const val=shortcutInput.value.trim(); if(!val)return; con
 function renderShortcuts(){if(!SHORTCUTS||SHORTCUTS.length===0){shortcutsListEl.innerHTML='<div class="muted">no shortcuts yet ✨</div>'; return;} shortcutsListEl.innerHTML=SHORTCUTS.map((s,i)=>`<div class="shortcutItem" onclick="window.open('${s.url}','_blank')">${s.emoji} <span>${s.name}</span></div>`).join('');}
 
 async function mainSearch(){const q=qEl.value.trim(); if(!q) return; if(/^https?:\/\//i.test(q) || (q.includes('.') && !q.includes(' '))){ window.location.href = q.startsWith('http')?q:'https://'+q; return; } pushHistory(q); setLamboThinking(true); const doLambo=(SEARCH_SOURCE==='both'||SEARCH_SOURCE==='lambo'); const doGoogle=(SEARCH_SOURCE==='both'||SEARCH_SOURCE==='google'); if(doLambo){document.getElementById('lamboResult').style.display='block';await renderLambo(q);} else{document.getElementById('lamboResult').style.display='none';} if(doGoogle){document.getElementById('googleResult').style.display='block';renderGoogle(q);} else{document.getElementById('googleResult').style.display='none';} setLamboThinking(false);}
-async function renderLambo(q){if(!API_KEY){lamboTextEl.textContent='No API key — open Settings ⚙'; return;} lamboTextEl.textContent='Lambo is thinking... 🌈'; document.getElementById('logo').style.animation='logoThink 3s infinite'; const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API_KEY}`; try{ const body={contents:[{parts:[{text:`You are Lambo, a friendly mobile AI cat built on Gemini. Created by Montry. Developed for Nothing App. Nothing is an a useless app 
-About this app
-Nothing that grows when you go back. Customize it and find secrets 👀
-App description
-Nothing has never been this fun 😎
 
-This app starts with one simple word: Nothing. But when you go back… it grows 👀
-
-Change the word to anything you like, make it yours, and explore fun little secrets hidden inside the app 🥚✨
-
-Some words unlock surprises, some trigger funny moments, and others might show you things you didn’t expect 👀
-
-This app is just for fun — no stress, no rules, just vibes. Tap around, try weird words, and enjoy the randomness 😄
-
+async function renderLambo(q){if(!API_KEY){lamboTextEl.textContent='No API key — open Settings ⚙'; return;} lamboTextEl.textContent='Lambo is thinking... 🌈'; document.getElementById('logo').style.animation='logoThink 3s infinite'; const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API_KEY}`; try{ const body={contents:[{parts:[{text:`You are Lambo, a friendly gen z cat designed to help people and be their  Created by Montry. Developed for Nothing App. The Nothing app is a useless app. About the nothing app Nothing that grows when you go back. Customize it and find secrets  Change the word to anything you like, make it yours, and explore fun little secrets hidden inside the app Some words unlock surprises, some trigger funny moments, and others might show you things you didn’t expect
+This app is just for fun — no stress, no rules, just vibes. Tap around, try weird words, and enjoy the randomness 
 Features:
-
 The word gets bigger when you go back
-
 Customize the text with anything you want
-
 Hidden Easter eggs
-
 Fun surprises and meme-style moments
-
 Clean and simple design
-
-Start with Nothing… and see where it goes 👀
- Answer concisely. Question: ${q}`}]}};
-        const res = await fetch(endpoint,{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify(body)
-        });
-        const data = await res.json();
-        let txt = data.candidates ? data.candidates[0].content.parts[0].text : "Lambo couldn't fetch an answer 😿";
-        lamboTextEl.textContent = '';
-        for(let i=0;i<txt.length;i++){
-            lamboTextEl.textContent += txt[i];
-            await new Promise(r=>setTimeout(r,22));
-        }
-    }catch(e){
-        lamboTextEl.textContent = "Error: "+e.message;
-    } finally{
-        document.getElementById('logo').style.animation='logoIdle 6s ease-in-out infinite';
-    }
+Start with Nothing… and see where it goes you are a Easter egg in nothing app. Answer concisely. Question: ${q}`}]}]}; const res = await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); const data = await res.json(); let txt = data.candidates ? data.candidates[0].content.parts[0].text : "Lambo couldn't fetch an answer 😿"; 
+lamboTextEl.textContent=''; 
+for(let i=0;i<txt.length;i++){ 
+    lamboTextEl.textContent+=txt[i]; 
+    await new Promise(r=>setTimeout(r,20)); 
+} 
+} catch(e){ 
+lamboTextEl.textContent="Error: "+e.message; 
+} finally{ 
+document.getElementById('logo').style.animation='logoIdle 6s ease-in-out infinite'; 
+} 
 }
 
-function setLamboThinking(val){
-    const logo=document.getElementById('logo');
-    if(val){
-        logo.style.animation='logoThink 3s infinite';
-    }else{
-        logo.style.animation='logoIdle 6s ease-in-out infinite';
-    }
+function setLamboThinking(val){ 
+const logo=document.getElementById('logo'); 
+if(val){ 
+logo.style.animation='logoThink 3s infinite'; 
+}else{ 
+logo.style.animation='logoIdle 6s ease-in-out infinite'; 
+} 
 }
 
-function renderGoogle(q){
-    if(GOOGLE_MODE==='cse'){
-        // Use Programmable Search Engine
-        document.querySelector('.gcse-search').setAttribute('queryParameterName',q);
-        openGoogleBtn.style.display='none';
-    } else{
-        openGoogleBtn.style.display='block';
-        openGoogleBtn.onclick=()=>window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`,'_blank');
-    }
+function renderGoogle(q){ 
+if(GOOGLE_MODE==='cse'){ 
+// Programmable Search Engine default
+document.querySelector('.gcse-search').setAttribute('queryParameterName',q); 
+openGoogleBtn.style.display='none'; 
+} else{ 
+openGoogleBtn.style.display='block'; 
+openGoogleBtn.onclick=()=>window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`,'_blank'); 
+} 
 }
 
-// Toast notification
-function toast(msg){
-    const t=document.createElement('div');
-    t.textContent=msg;
-    t.style.position='fixed';
-    t.style.bottom='80px';
-    t.style.left='50%';
-    t.style.transform='translateX(-50%)';
-    t.style.background='rgba(255,255,255,0.1)';
-    t.style.color='#e4e6eb';
-    t.style.padding='10px 14px';
-    t.style.borderRadius='20px';
-    t.style.backdropFilter='blur(6px)';
-    t.style.zIndex=9999;
-    document.body.appendChild(t);
-    setTimeout(()=>t.remove(),2500);
+// simple toast
+function toast(msg){ 
+const t=document.createElement('div'); 
+t.textContent=msg; 
+t.style.position='fixed'; 
+t.style.bottom='80px'; 
+t.style.left='50%'; 
+t.style.transform='translateX(-50%)'; 
+t.style.background='rgba(255,255,255,0.1)'; 
+t.style.color='#e4e6eb'; 
+t.style.padding='10px 14px'; 
+t.style.borderRadius='20px'; 
+t.style.backdropFilter='blur(6px)'; 
+t.style.zIndex=9999; 
+document.body.appendChild(t); 
+setTimeout(()=>t.remove(),2500); 
 }
 </script>
 </body>
