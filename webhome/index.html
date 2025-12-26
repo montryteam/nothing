@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lambo Search — Nothing App</title>
+<title>Lambo AI — Nothing App</title>
 
-<!-- Google Programmable Search -->
+<!-- Google Programmable Search (default enabled) -->
 <script async src="https://cse.google.com/cse.js?cx=f015436e565c94c8d"></script>
 
 <style>
@@ -13,471 +13,378 @@
   --bg:#0f1115;
   --primary:#e4e6eb;
   --glass:rgba(255,255,255,0.08);
-  --glass-border:rgba(255,255,255,0.14);
-  --blur:20px;
-  --radius:30px;
-  --shadow:0 20px 40px rgba(0,0,0,0.55);
-  --btn-bg:#e4e6eb;
-  --btn-fg:#000;
+  --blur:blur(18px);
+  --radius:28px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-
 body{
+  font-family:system-ui,-apple-system,Roboto,sans-serif;
   background:var(--bg);
   color:var(--primary);
-  font-family:Inter,system-ui,Arial,sans-serif;
-  padding:18px;
+  min-height:100vh;
+  padding:16px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:14px;
-  overflow-x:hidden;
-}
-
-/* Bing wallpaper */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
   background-size:cover;
   background-position:center;
-  z-index:-2;
-  opacity:0;
-  transition:opacity 1.2s ease;
-}
-body.bg-active::before{opacity:0.35}
-
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
-  background:linear-gradient(to bottom,rgba(15,17,21,0.88),rgba(15,17,21,0.96));
-  z-index:-1;
+  transition:background-image 0.8s ease;
 }
 
-/* Logo */
-.logo{
-  font-weight:900;
-  font-size:34px;
-  background:linear-gradient(120deg,#4f8cff,#8b5cf6);
-  background-size:300% 300%;
+h1{
+  font-size:2.6rem;
+  font-weight:800;
+  margin:10px 0 4px;
+  background:linear-gradient(120deg,#5da9ff,#a855f7);
   -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  animation:logoIdle 6s ease-in-out infinite;
+  -webkit-text-fill-color:transparent;
+  animation:idleGradient 6s ease infinite;
 }
-@keyframes logoIdle{
+
+h1.thinking{
+  background:linear-gradient(120deg,red,orange,yellow,green,cyan,blue,purple);
+  background-size:400% 400%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:thinkingGradient 2s linear infinite;
+}
+
+@keyframes idleGradient{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
-@keyframes logoThink{
-  0%{background-position:0% 50%;filter:hue-rotate(0deg)}
-  50%{background-position:100% 50%;filter:hue-rotate(180deg)}
-  100%{background-position:0% 50%;filter:hue-rotate(360deg)}
+@keyframes thinkingGradient{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
 }
 
-.subtitle{font-size:14px;opacity:.85;text-align:center}
-.byline{font-size:13px;opacity:.7}
-.byline a{color:#9ad6ff;text-decoration:underline}
+.subtitle{
+  font-size:0.95rem;
+  opacity:.8;
+  margin-bottom:10px;
+  text-align:center;
+}
 
-/* Glass cards */
+.notice{
+  font-size:0.85rem;
+  opacity:.85;
+  margin-bottom:18px;
+  text-align:center;
+}
+.notice a{
+  color:var(--primary);
+  font-weight:600;
+  text-decoration:underline;
+}
+
 .card{
   width:100%;
-  max-width:430px;
+  max-width:480px;
   background:var(--glass);
-  backdrop-filter:blur(var(--blur));
-  -webkit-backdrop-filter:blur(var(--blur));
-  border:1px solid var(--glass-border);
-  border-radius:var(--radius);
-  padding:14px;
-  box-shadow:var(--shadow);
-}
-
-/* Search */
-.row{display:flex;gap:10px}
-input[type="text"]{
-  flex:1;
-  background:rgba(0,0,0,0.35);
-  color:var(--primary);
-  border-radius:34px;
-  padding:15px 18px;
-  border:1px solid rgba(255,255,255,0.12);
-  font-size:15px;
-}
-button.btn{
-  background:var(--btn-bg);
-  color:var(--btn-fg);
-  border:none;
-  border-radius:34px;
-  padding:14px 20px;
-  font-weight:800;
-  cursor:pointer;
-}
-
-/* Results */
-.result{
-  width:100%;
-  max-width:430px;
-  background:var(--glass);
-  backdrop-filter:blur(var(--blur));
-  border:1px solid var(--glass-border);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
   border-radius:var(--radius);
   padding:16px;
-  box-shadow:var(--shadow);
+  margin-bottom:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.45);
 }
-.sectionTitle{
-  font-size:13px;
-  font-weight:900;
-  opacity:.9;
-  margin-bottom:8px;
+
+input,button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:34px;
+  font-size:16px;
 }
-.lamboText{
+
+input{
+  background:rgba(255,255,255,.12);
+  color:white;
+}
+
+button{
+  background:white;
+  color:black;
+  font-weight:700;
+  margin-top:10px;
+}
+
+#answers{
   font-size:15px;
-  line-height:1.6;
+  line-height:1.55;
   white-space:pre-wrap;
 }
 
-/* Lists */
-.list{display:flex;flex-direction:column;gap:8px}
-.item{
-  font-size:13px;
-  opacity:.9;
+.section-title{
+  font-size:0.9rem;
+  opacity:.7;
+  margin-bottom:6px;
+}
+
+#history div{
+  font-size:0.9rem;
+  opacity:.85;
+  margin:4px 0;
   cursor:pointer;
   text-decoration:underline;
 }
 
-/* Floating settings */
-.settingsBtn{
+/* Floating settings button */
+#settingsBtn{
   position:fixed;
-  right:18px;
-  bottom:18px;
-  width:58px;
-  height:58px;
+  bottom:20px;
+  right:20px;
+  width:56px;
+  height:56px;
   border-radius:18px;
-  background:var(--btn-bg);
-  color:var(--btn-fg);
+  background:white;
+  color:black;
+  font-size:22px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
-  box-shadow:var(--shadow);
-  cursor:pointer;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
 }
 
 /* Settings modal */
-.overlay{
+#settings{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.75);
+  background:rgba(0,0,0,.7);
   display:none;
   align-items:center;
   justify-content:center;
-  z-index:50;
 }
-.settings{
-  width:92%;
-  max-width:430px;
+#settingsBox{
+  width:90%;
+  max-width:360px;
   background:var(--glass);
-  backdrop-filter:blur(26px);
-  border:1px solid var(--glass-border);
-  border-radius:26px;
-  padding:16px;
+  backdrop-filter:var(--blur);
+  border-radius:28px;
+  padding:18px;
+}
+.settings-item{
+  font-size:0.9rem;
+  margin:10px 0;
+}
+.settings-item label{
   display:flex;
-  flex-direction:column;
-  gap:12px;
+  align-items:center;
+  gap:8px;
 }
-.label{font-size:13px;font-weight:900}
-select,input[type="color"]{
-  width:100%;
-  padding:10px;
-  border-radius:14px;
-  border:none;
-  background:rgba(0,0,0,.4);
-  color:var(--primary);
-}
-.small{font-size:12px;opacity:.75}
 
-/* Google */
-.gcse-search{background:transparent!important}
-
-@media(max-width:420px){
-  .logo{font-size:28px}
+.toggle{
+  accent-color:white;
 }
+
+a{color:white}
+
+.gcse-search{
+  background:transparent !important;
+}
+
+/* hide google section when disabled */
+.hidden{display:none}
 </style>
 </head>
 
 <body>
-<div class="logo" id="logo">LAMBO</div>
-<div class="subtitle">your friend & smart AI assistant 😺</div>
-<div class="byline">developed by <strong>Montry</strong> for <a href="https://montryteam.github.io/app.montry.nothing/" target="_blank">Nothing</a></div>
 
-<!-- Search -->
+<h1 id="title">Lambo</h1>
+<div class="subtitle">your homie & AI assistant 🤍</div>
+<div class="notice">
+  Built by <b>Montry</b> for the <a href="https://montryteam.github.io/nothing/" target="_blank">Nothing</a> app
+</div>
+
 <div class="card">
-  <div class="row">
-    <input id="q" type="text" placeholder="ask Lambo or paste a link..." />
-    <button class="btn" id="go">GO</button>
-  </div>
+  <input id="query" placeholder="ask Lambo… or paste a link 👀">
+  <button onclick="run()">Go</button>
 </div>
 
-<!-- Lambo -->
-<div class="result" id="lamboBox">
-  <div class="sectionTitle">🐾 Lambo Answers</div>
-  <div class="lamboText" id="lamboText">
-Heyyy 👋  
-I’m Lambo 😼 — a friendly AI cat built on Gemini,  
-made by **Montry** for the **Nothing app**.  
-
-I’m here to help, vibe, and keep things chill ✨  
-Ask me stuff, throw links, or just mess around 😎
-  </div>
+<div class="card">
+  <div class="section-title">🐾 Lambo Answers</div>
+  <div id="answers">Lambo chillin… waiting for you 😼</div>
 </div>
 
-<!-- Google -->
-<div class="result" id="googleBox">
-  <div class="sectionTitle">GOOGLE RESULTS</div>
+<div class="card" id="googleBox">
+  <div class="section-title">🔎 Google Results</div>
   <div class="gcse-search"></div>
-  <button class="btn" id="openGoogle" style="margin-top:8px;width:100%;display:none">
-    Open in Google 🌐
-  </button>
+  <button onclick="openGoogle()">Open in Google</button>
 </div>
 
-<!-- Shortcuts -->
 <div class="card">
-  <div class="sectionTitle">SHORTCUTS ⚡</div>
-  <div id="shortcuts" class="list small">no shortcuts yet.</div>
+  <div class="section-title">🕘 History</div>
+  <div id="history"></div>
 </div>
 
-<!-- History -->
-<div class="card">
-  <div class="sectionTitle">HISTORY ⏱️</div>
-  <div id="history" class="list small">no history yet.</div>
-</div>
+<div id="settingsBtn" onclick="openSettings()">⚙</div>
 
-<!-- Settings -->
-<div class="settingsBtn" id="openSettings">⚙</div>
-<div class="overlay" id="overlay">
-  <div class="settings">
-    <div class="label">API key (Gemini)</div>
-    <input id="apiKey" type="text" placeholder="paste Gemini API key" />
-    <div class="small"><a href="https://aistudio.google.com/app/apikey" target="_blank">Get API key</a></div>
+<div id="settings">
+  <div id="settingsBox">
+    <h3>Settings ⚡</h3>
 
-    <div class="label">Search source</div>
-    <select id="source">
-      <option value="both">Lambo + Google</option>
-      <option value="lambo">Lambo only</option>
-      <option value="google">Google only</option>
-    </select>
-
-    <div class="label">Google mode</div>
-    <select id="googleMode">
-      <option value="cse">Programmable Search</option>
-      <option value="link">Open Google link</option>
-    </select>
-
-    <div class="label">Button color</div>
-    <input type="color" id="btnColor" value="#e4e6eb"/>
-
-    <div class="label">Daily Bing wallpaper</div>
-    <select id="bingBg">
-      <option value="off">Disabled</option>
-      <option value="on">Enabled</option>
-    </select>
-
-    <div class="label">Add shortcut</div>
-    <input id="shortcutInput" type="text" placeholder="example.com"/>
-
-    <div style="display:flex;gap:8px">
-      <button class="btn" id="save">Save</button>
-      <button class="btn" id="reset" style="background:#222;color:#fff">Reset</button>
+    <div class="settings-item">
+      <label><input type="checkbox" id="useLambo" class="toggle" checked> Lambo AI</label>
     </div>
+    <div class="settings-item">
+      <label><input type="checkbox" id="useGoogle" class="toggle" checked> Google Search</label>
+    </div>
+    <div class="settings-item">
+      <label><input type="checkbox" id="bingBg" class="toggle"> Daily Bing wallpaper 🌄</label>
+    </div>
+
+    <div class="settings-item">
+      <input id="apiKey" placeholder="Gemini API key">
+      <small>
+        Get it from
+        <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>
+      </small>
+    </div>
+
+    <button onclick="resetSettings()">Reset defaults</button>
+    <button onclick="clearHistory()">Clear history</button>
+    <button onclick="closeSettings()">Close</button>
   </div>
 </div>
 
 <script>
-const LS={
- api:'lambo_api',src:'lambo_src',gmode:'lambo_gmode',
- btn:'lambo_btn',hist:'lambo_hist',short:'lambo_short',bing:'lambo_bing'
-};
+const answers = document.getElementById("answers");
+const title = document.getElementById("title");
+const historyBox = document.getElementById("history");
+const googleBox = document.getElementById("googleBox");
 
-let API=localStorage.getItem(LS.api)||'';
-let SRC=localStorage.getItem(LS.src)||'both';
-let GMODE=localStorage.getItem(LS.gmode)||'cse';
-let BTN=localStorage.getItem(LS.btn)||'#e4e6eb';
-let HIST=JSON.parse(localStorage.getItem(LS.hist)||'[]');
-let SHORT=JSON.parse(localStorage.getItem(LS.short)||'[]');
-let BING=localStorage.getItem(LS.bing)||'off';
-
-const q=document.getElementById('q');
-const logo=document.getElementById('logo');
-const lamboText=document.getElementById('lamboText');
-const lamboBox=document.getElementById('lamboBox');
-const googleBox=document.getElementById('googleBox');
-const openGoogle=document.getElementById('openGoogle');
-const histEl=document.getElementById('history');
-const shortEl=document.getElementById('shortcuts');
-const overlay=document.getElementById('overlay');
-
-document.documentElement.style.setProperty('--btn-bg',BTN);
-document.getElementById('apiKey').value=API;
-document.getElementById('source').value=SRC;
-document.getElementById('googleMode').value=GMODE;
-document.getElementById('btnColor').value=BTN;
-document.getElementById('bingBg').value=BING;
-
-renderHistory();renderShortcuts();
-if(BING==='on')loadBing();
-
-document.getElementById('go').onclick=search;
-q.onkeydown=e=>{if(e.key==='Enter')search()};
-document.getElementById('openSettings').onclick=()=>overlay.style.display='flex';
-document.getElementById('save').onclick=save;
-document.getElementById('reset').onclick=()=>{localStorage.clear();location.reload()};
-
-function search(){
- const text=q.value.trim();
- if(!text)return;
-
- if(text.startsWith('http') || (text.includes('.') && !text.includes(' '))){
-   location.href=text.startsWith('http')?text:'https://'+text;
-   return;
- }
-
- HIST.unshift(text);
- localStorage.setItem(LS.hist,JSON.stringify(HIST));
- renderHistory();
-
- if(SRC!=='google') runLambo(text);
- else lamboBox.style.display='none';
-
- if(SRC!=='lambo') runGoogle(text);
- else googleBox.style.display='none';
+function saveSettings(){
+  localStorage.setItem("lambo_settings",JSON.stringify({
+    lambo:useLambo.checked,
+    google:useGoogle.checked,
+    bing:bingBg.checked,
+    key:apiKey.value
+  }));
 }
 
-async function runLambo(t){
- if(!API){
-  lamboText.textContent='yo 👀 add your API key in settings ⚙';
-  return;
- }
- lamboBox.style.display='block';
- logo.style.animation='logoThink 3s infinite';
- lamboText.textContent='thinking hard rn… 🌈';
+function loadSettings(){
+  const s = JSON.parse(localStorage.getItem("lambo_settings")||"{}");
+  useLambo.checked = s.lambo ?? true;
+  useGoogle.checked = s.google ?? true;
+  bingBg.checked = s.bing ?? false;
+  apiKey.value = s.key || "";
+  googleBox.classList.toggle("hidden",!useGoogle.checked);
+  if(bingBg.checked) loadBing();
+}
 
- let systemPrompt = `
-You are Lambo 🐾 — a friendly, playful AI cat.
-Built on Gemini, developed by Montry for the Nothing app.
-You love helping people, you’re chill, funny, and Gen-Z styled.
-Use casual tone, abbreviations, emojis, and vibes.
+function openSettings(){settings.style.display="flex"}
+function closeSettings(){saveSettings();settings.style.display="none"}
 
-If user asks about Nothing app, respond with this exact description:
+function resetSettings(){
+  localStorage.removeItem("lambo_settings");
+  loadSettings();
+}
 
-Nothing has never been this fun 😎
+function clearHistory(){
+  localStorage.removeItem("lambo_history");
+  historyBox.innerHTML="";
+}
+
+function addHistory(q){
+  const h = JSON.parse(localStorage.getItem("lambo_history")||"[]");
+  h.unshift(q);
+  localStorage.setItem("lambo_history",JSON.stringify(h.slice(0,10)));
+  renderHistory();
+}
+
+function renderHistory(){
+  const h = JSON.parse(localStorage.getItem("lambo_history")||"[]");
+  historyBox.innerHTML = h.map(x=>`<div onclick="reuse('${x.replace(/'/g,"")}')">${x}</div>`).join("");
+}
+
+function reuse(q){
+  query.value=q;
+  run();
+}
+
+function isUrl(t){
+  return /^https?:\/\//i.test(t) || (t.includes(".") && !t.includes(" "));
+}
+
+async function run(){
+  const q = query.value.trim();
+  if(!q) return;
+
+  if(isUrl(q)){
+    location.href = q.startsWith("http")?q:"https://"+q;
+    return;
+  }
+
+  addHistory(q);
+
+  if(useLambo.checked){
+    title.classList.add("thinking");
+    answers.textContent="Lambo thinking fr… 🧠✨";
+
+    if(/nothing app/i.test(q)){
+      answers.textContent=`Nothing has never been this fun 😎
 
 This app starts with one simple word: Nothing.
 But when you go back… it grows 👀
 
-Change the word to anything you like, make it yours,
-and explore fun little secrets hidden inside the app 🥚✨
+No stress, just vibes ✨`;
+      title.classList.remove("thinking");
+      return;
+    }
 
-Some words unlock surprises, some trigger funny moments,
-and others might show you things you didn’t expect 👀
+    const key = apiKey.value;
+    if(!key){
+      answers.textContent="drop your API key first bestie 🗝️";
+      title.classList.remove("thinking");
+      return;
+    }
 
-This app is just for fun — no stress, no rules, just vibes.
-Tap around, try weird words, and enjoy the randomness 😄
+    try{
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${key}`,
+        {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            contents:[{parts:[{text:
+              `You are Lambo 🐱, a Gen Z friendly AI cat built by Montry for the Nothing app. Be chill, helpful, fun.\nUser: ${q}`
+            }]}]
+          })
+        }
+      );
+      const data = await res.json();
+      answers.textContent = data.candidates?.[0]?.content?.parts?.[0]?.text || "bruh something broke 💀";
+    }catch{
+      answers.textContent="error moment 💀 try again";
+    }
+    title.classList.remove("thinking");
+  }
 
-Features:
-- The word gets bigger when you go back
-- Customize the text with anything you want
-- Hidden Easter eggs
-- Fun surprises and meme-style moments
-- Clean and simple design
-
-Start with Nothing… and see where it goes 👀
-`;
-
- try{
-  const r=await fetch(
-   `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API}`,
-   {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      contents:[{parts:[{text:systemPrompt+"\nUser: "+t}]}]
-    })
-   }
-  );
-  const d=await r.json();
-  lamboText.textContent =
-    d.candidates?.[0]?.content?.parts?.[0]?.text || 'idk what happened 😿';
- }catch{
-  lamboText.textContent='oops 😿 something broke';
- }
- logo.style.animation='logoIdle 6s infinite';
+  googleBox.classList.toggle("hidden",!useGoogle.checked);
 }
 
-function runGoogle(t){
- googleBox.style.display='block';
- if(GMODE==='link'){
-  openGoogle.style.display='block';
-  openGoogle.onclick=()=>window.open(
-   'https://www.google.com/search?q='+encodeURIComponent(t),'_blank'
-  );
- }else{
-  openGoogle.style.display='none';
- }
+function openGoogle(){
+  window.open("https://www.google.com/search?q="+encodeURIComponent(query.value));
 }
 
-function renderHistory(){
- histEl.innerHTML = HIST.length
- ? HIST.map(h=>`<div class="item" onclick="q.value='${h}';search()">${h}</div>`).join('')
- : 'no history yet.';
-}
-
-function renderShortcuts(){
- shortEl.innerHTML = SHORT.length
- ? SHORT.map(s=>`<div class="item" onclick="location.href='https://${s}'">${s}</div>`).join('')
- : 'no shortcuts yet.';
-}
-
-function save(){
- API=document.getElementById('apiKey').value.trim();
- SRC=document.getElementById('source').value;
- GMODE=document.getElementById('googleMode').value;
- BTN=document.getElementById('btnColor').value;
- BING=document.getElementById('bingBg').value;
- const sc=document.getElementById('shortcutInput').value.trim();
- if(sc) SHORT.push(sc);
-
- localStorage.setItem(LS.api,API);
- localStorage.setItem(LS.src,SRC);
- localStorage.setItem(LS.gmode,GMODE);
- localStorage.setItem(LS.btn,BTN);
- localStorage.setItem(LS.short,JSON.stringify(SHORT));
- localStorage.setItem(LS.bing,BING);
-
- document.documentElement.style.setProperty('--btn-bg',BTN);
- if(BING==='on') loadBing();
- else document.body.classList.remove('bg-active');
-
- renderShortcuts();
- overlay.style.display='none';
-}
-
+/* Bing daily wallpaper */
 async function loadBing(){
- try{
-  const r=await fetch('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1');
-  const d=await r.json();
-  document.body.style.setProperty(
-    '--bing','url(https://www.bing.com'+d.images[0].url+')'
-  );
-  document.body.style.backgroundImage='var(--bing)';
-  document.body.classList.add('bg-active');
- }catch{}
+  try{
+    const r = await fetch("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1");
+    const j = await r.json();
+    document.body.style.backgroundImage =
+      "url(https://www.bing.com"+j.images[0].url+")";
+  }catch{}
 }
+
+useGoogle.onchange=()=>googleBox.classList.toggle("hidden",!useGoogle.checked);
+bingBg.onchange=()=>bingBg.checked?loadBing():document.body.style.backgroundImage="";
+
+loadSettings();
+renderHistory();
 </script>
+
 </body>
 </html>
