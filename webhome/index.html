@@ -6,243 +6,196 @@
 <title>Lambo AI — Nothing App</title>
 <script async src="https://cse.google.com/cse.js?cx=f015436e565c94c8d"></script>
 <style>
-:root{
-    --bg:#0f1115;--fg:#e4e6eb;--surface:rgba(26, 28, 33, 0.75);--radius:26px;
-    --button-bg:#6a00ff;--button-fg:#ffffff;--accent:#6a00ff;
+:root {
+    --bg: #000; --fg: #fff; --surface: rgba(20, 20, 20, 0.7);
+    --radius: 28px; --button-bg: #fff; --button-fg: #000;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:100vh;overflow-x:hidden;}
-.bg-layer{position:fixed;inset:0;z-index:-1;background-size:cover;background-position:center;filter:brightness(0.5);transition:1s;}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+body { 
+    background: var(--bg); color: var(--fg); padding: 20px; 
+    display: flex; flex-direction: column; align-items: center; gap: 15px;
+    min-height: 100vh; overflow-x: hidden;
+}
+.bg-layer { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: brightness(0.4); transition: 1.5s ease-in-out; }
 
-/* Logo Animation */
-.logo{
-    font-weight:900;font-size:42px;text-align:center;
+/* Logo Design & Animations */
+.logo {
+    font-weight: 900; font-size: 45px; text-align: center; cursor: default;
     background: linear-gradient(var(--angle, 90deg), #6a00ff, #009dff);
     -webkit-background-clip: text; background-clip: text; color: transparent;
-    transition: 0.5s; animation: glow 4s infinite alternate;
+    transition: 0.3s; filter: drop-shadow(0 0 8px rgba(106,0,255,0.4));
+    animation: glowPulse 3s infinite alternate;
 }
-@keyframes glow {
-    0% { filter: drop-shadow(0 0 2px rgba(106,0,255,0.2)); }
-    100% { filter: drop-shadow(0 0 15px rgba(0,157,255,0.6)); }
-}
-.thinking { animation: thinkColors 0.5s infinite linear !important; }
-@keyframes thinkColors {
-    0% { filter: hue-rotate(0deg); transform: scale(1.05); }
-    100% { filter: hue-rotate(360deg); transform: scale(1.05); }
-}
+@keyframes glowPulse { from { filter: drop-shadow(0 0 5px rgba(106,0,255,0.4)); } to { filter: drop-shadow(0 0 20px rgba(0,157,255,0.7)); } }
+.thinking { animation: rainbowThinking 0.4s infinite linear !important; }
+@keyframes rainbowThinking { 0% { filter: hue-rotate(0deg) scale(1.1); } 100% { filter: hue-rotate(360deg) scale(1.1); } }
 
-.card{width:100%;max-width:420px;background:var(--surface);backdrop-filter:blur(20px);border-radius:var(--radius);padding:16px;box-shadow:0 10px 30px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);z-index:10;}
-.row{display:flex;gap:10px;align-items:center;}
-input, textarea, select{flex:1;background:rgba(0,0,0,0.4);color:#fff;border-radius:28px;padding:14px;border:1px solid rgba(255,255,255,0.1);outline:none;}
-button.btn{background:var(--button-bg);color:var(--button-fg);padding:12px 18px;border-radius:28px;border:0;font-weight:bold;cursor:pointer;transition:0.3s;}
-button.btn:hover{opacity:0.8;transform:scale(0.98);}
+.card { width: 100%; max-width: 440px; background: var(--surface); backdrop-filter: blur(25px); border-radius: var(--radius); padding: 16px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+.row { display: flex; gap: 10px; }
+input { flex: 1; background: rgba(0,0,0,0.5); color: #fff; border-radius: 30px; padding: 15px; border: 1px solid rgba(255,255,255,0.08); outline: none; font-size: 16px; }
+button.btn { background: var(--button-bg); color: var(--button-fg); padding: 12px 20px; border-radius: 30px; border: 0; font-weight: 800; cursor: pointer; transition: 0.3s; }
+button.btn:active { transform: scale(0.95); }
 
-.result-box{width:100%;max-width:420px;background:var(--surface);backdrop-filter:blur(25px);border-radius:var(--radius);padding:15px;display:none;border:1px solid rgba(255,255,255,0.1);animation:slideUp 0.4s ease;}
-@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.result-box { width: 100%; max-width: 440px; background: var(--surface); backdrop-filter: blur(30px); border-radius: var(--radius); padding: 20px; border: 1px solid rgba(255,255,255,0.1); display: none; animation: slideUp 0.4s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.lambo-text { font-size: 16px; line-height: 1.6; color: #f5f5f5; white-space: pre-wrap; }
 
-.lambo-text{font-size:15px;line-height:1.6;color:#f0f0f0;white-space:pre-wrap;}
-.settings-float{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:20px;background:var(--button-bg);color:var(--button-fg);display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;z-index:100;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
-
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(15px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
-.settings-box{width:100%;max-width:400px;background:#1a1c21;padding:25px;border-radius:30px;display:flex;flex-direction:column;gap:15px;border:1px solid rgba(255,255,255,0.1);max-height:90vh;overflow-y:auto;}
-.guide-box{background:rgba(106,0,255,0.1);padding:12px;border-radius:15px;font-size:12px;color:#bbb;line-height:1.4;border:1px dashed #6a00ff;}
-.guide-box a{color:#009dff;text-decoration:none;font-weight:bold;}
-
-.shortcuts{display:none;gap:10px;justify-content:center;width:100%;max-width:420px;flex-wrap:wrap;}
-.tile{width:70px;height:70px;border-radius:20px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid rgba(255,255,255,0.1);text-align:center;padding:5px;}
+.settings-float { position: fixed; right: 20px; bottom: 20px; width: 60px; height: 60px; border-radius: 22px; background: var(--button-bg); color: var(--button-fg); display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; z-index: 100; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+.settings-box { width: 100%; max-width: 420px; background: #151515; border-radius: 35px; padding: 30px; display: flex; flex-direction: column; gap: 18px; border: 1px solid rgba(255,255,255,0.1); max-height: 85vh; overflow-y: auto; }
+.api-guide { background: rgba(106,0,255,0.15); padding: 12px; border-radius: 15px; font-size: 13px; color: #ccc; border: 1px dashed #6a00ff; line-height: 1.5; }
 </style>
 </head>
 <body>
 <div class="bg-layer" id="bgLayer"></div>
-<div class="logo" id="mainLogo">LAMBO</div>
+<div class="logo" id="lamboLogo">LAMBO</div>
 
 <div class="card">
     <div class="row">
-        <input id="q" type="text" placeholder="Ask Lambo anything..." />
+        <input id="q" type="text" placeholder="What's on your mind? 😼" />
         <button class="btn" id="goBtn">GO</button>
     </div>
-    <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn" id="clearBtn" style="background:#333;flex:1">Clear</button>
-        <button class="btn" id="googleDirectBtn" style="display:none;background:#4285f4;flex:1">View in Google</button>
+    <div style="margin-top:12px; display:flex; gap:10px;">
+        <button class="btn" id="clearBtn" style="background:rgba(255,255,255,0.1);color:#fff;flex:1">Clear</button>
+        <button class="btn" id="googleBtn" style="display:none;background:#4285f4;color:#fff;flex:2">View in Google 🌐</button>
     </div>
 </div>
-
-<div class="shortcuts" id="shortcutsArea"></div>
 
 <div class="result-box" id="lamboResult">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <span style="font-size:11px;font-weight:bold;letter-spacing:1px;color:#6a00ff">✦ LAMBO AI</span>
-    </div>
-    <div class="lambo-text" id="lamboOutput">Lambo is ready for vibes... 😼</div>
-</div>
-
-<div class="result-box" id="cseResult">
-    <div class="gcse-search"></div>
+    <div style="font-size:12px; font-weight:900; color:#6a00ff; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">✦ Lambo Vibe</div>
+    <div class="lambo-text" id="lamboOutput">Lambo is chillin'... drop a prompt! 😺</div>
 </div>
 
 <div class="settings-float" id="settingsBtn">⚙</div>
 
 <div class="overlay" id="overlay">
     <div class="settings-box">
-        <h2 style="text-align:center">Lambo Settings</h2>
-        
-        <div class="guide-box">
-            <strong>How to get API Key:</strong><br>
-            1. Go to <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a><br>
-            2. Click "Create API Key"<br>
-            3. Copy and paste it below.
+        <h2 style="text-align:center; font-size:24px;">Lambo Settings</h2>
+        <div class="api-guide">
+            <strong>🔑 How to get API Key:</strong><br>
+            1. Visit <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#009dff; font-weight:bold;">Google AI Studio</a>.<br>
+            2. Click "Create API Key" and copy it.<br>
+            3. Paste it in the field below.
         </div>
+        <input id="apiKeyInput" type="password" placeholder="Paste Gemini API Key" />
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Bing Wallpaper BG</span>
+            <input type="checkbox" id="meshSwitch" style="width:20px; height:20px;">
+        </div>
+        <label>Google Button Mode</label>
+        <select id="googleMode" style="padding:12px; border-radius:15px; background:#000; color:#fff; border:1px solid #333;">
+            <option value="direct">Show "View in Google" button</option>
+            <option value="none">AI results only</option>
+        </select>
+        <label>Button Color Theme</label>
+        <input type="color" id="colorPicker" value="#ffffff" style="height:45px; cursor:pointer;">
         
-        <label>Gemini API Key</label>
-        <input id="apiKeyInput" type="password" placeholder="Paste your key here..." />
-
-        <div class="row"><label>Bing Wallpaper BG</label><input type="checkbox" id="meshSwitch"></div>
-        <div class="row"><label>Enable Tiles</label><input type="checkbox" id="tilesSwitch"></div>
-        <textarea id="tilesInput" placeholder="Name|URL (one per line)" style="height:60px;font-size:12px;"></textarea>
-
-        <label>Google Search Mode</label>
-        <select id="googleMode">
-            <option value="direct">Direct Link Button (External)</option>
-            <option value="cse">In-App Search (CSE)</option>
-        </select>
-
-        <label>Primary AI Source</label>
-        <select id="resultSource">
-            <option value="both">Lambo + Google</option>
-            <option value="lambo">Lambo Only</option>
-        </select>
-
-        <label>Button Theme Color</label>
-        <input type="color" id="colorPicker" value="#6a00ff">
-
-        <button class="btn" id="saveBtn">Save & Apply ✨</button>
-        <button class="btn" id="closeBtn" style="background:#333">Close</button>
+        <button class="btn" id="saveBtn" style="padding:15px;">Save & Apply ✨</button>
+        <button class="btn" id="closeBtn" style="background:#252525; color:#fff;">Close</button>
     </div>
 </div>
 
 <script>
-const DB = { key: 'L_KEY', mesh: 'L_MSH', tilesOn: 'L_TON', tilesDt: 'L_TDT', gMode: 'L_GMD', rSrc: 'L_RSC', col: 'L_COL' };
+const DB = { key: 'L_KEY', mesh: 'L_MSH', gMode: 'L_GMD', col: 'L_COL' };
 
-function load(){
+function load() {
     document.getElementById('apiKeyInput').value = localStorage.getItem(DB.key) || '';
     document.getElementById('meshSwitch').checked = localStorage.getItem(DB.mesh) === 'true';
-    document.getElementById('tilesSwitch').checked = localStorage.getItem(DB.tilesOn) === 'true';
-    document.getElementById('tilesInput').value = localStorage.getItem(DB.tilesDt) || '';
     document.getElementById('googleMode').value = localStorage.getItem(DB.gMode) || 'direct';
-    document.getElementById('resultSource').value = localStorage.getItem(DB.rSrc) || 'both';
-    document.getElementById('colorPicker').value = localStorage.getItem(DB.col) || '#6a00ff';
-    applySettings();
+    document.getElementById('colorPicker').value = localStorage.getItem(DB.col) || '#ffffff';
+    apply();
 }
 
-function applySettings(){
+function apply() {
     const col = document.getElementById('colorPicker').value;
     document.documentElement.style.setProperty('--button-bg', col);
-    document.documentElement.style.setProperty('--accent', col);
+    const r = parseInt(col.substr(1,2),16), g = parseInt(col.substr(3,2),16), b = parseInt(col.substr(5,2),16);
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b);
+    document.documentElement.style.setProperty('--button-fg', lum > 150 ? '#000' : '#fff');
     
-    if(document.getElementById('meshSwitch').checked){
+    if(document.getElementById('meshSwitch').checked) {
         document.getElementById('bgLayer').style.backgroundImage = "url('https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=en-US')";
     } else {
         document.getElementById('bgLayer').style.backgroundImage = "none";
     }
-
-    renderTiles();
 }
 
-function renderTiles(){
-    const on = document.getElementById('tilesSwitch').checked;
-    const dt = document.getElementById('tilesInput').value.trim();
-    const area = document.getElementById('shortcutsArea');
-    if(!on || !dt) { area.style.display='none'; return; }
-    area.style.display='flex';
-    area.innerHTML = dt.split('\n').filter(l=>l.includes('|')).map(l=>{
-        const [n,u] = l.split('|');
-        return `<div class="tile" onclick="window.open('${u.includes('://')?u:'https://'+u}', '_blank')">${n}</div>`;
-    }).join('');
-}
-
-async function startSearch(){
+async function startSearch() {
     const q = document.getElementById('q').value.trim();
     if(!q) return;
 
-    const gMode = document.getElementById('googleMode').value;
-    const rSrc = document.getElementById('resultSource').value;
-    const logo = document.getElementById('mainLogo');
+    const logo = document.getElementById('lamboLogo');
+    const outBox = document.getElementById('lamboResult');
+    const outText = document.getElementById('lamboOutput');
+    const gBtn = document.getElementById('googleBtn');
+    const key = localStorage.getItem(DB.key);
 
-    // Reset UI
-    document.getElementById('lamboResult').style.display = 'block';
-    document.getElementById('cseResult').style.display = 'none';
-    document.getElementById('googleDirectBtn').style.display = 'none';
-
-    // Thinking State
+    outBox.style.display = 'block';
+    outText.textContent = "Lambo is cooking... 😼";
     logo.classList.add('thinking');
+    gBtn.style.display = 'none';
 
-    // Lambo AI Call
-    await callGemini(q);
-
-    // Google Logic
-    if(rSrc === 'both'){
-        if(gMode === 'cse'){
-            document.getElementById('cseResult').style.display = 'block';
-        } else {
-            document.getElementById('googleDirectBtn').style.display = 'block';
-            document.getElementById('googleDirectBtn').onclick = () => window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
-        }
+    if(!key) {
+        outText.textContent = "Yo! You need an API Key. Check Settings ⚙";
+        logo.classList.remove('thinking');
+        return;
     }
 
-    logo.classList.remove('thinking');
-}
-
-async function callGemini(query){
-    const key = localStorage.getItem(DB.key);
-    const out = document.getElementById('lamboOutput');
-    if(!key) { out.textContent = "Please add your API Key in settings ⚙"; return; }
+    const sys = `Identity: You are Lambo, a friendly Gen-Z AI cat cat developed by Montry for the "Nothing App". 
+    Vibe: Funny, polite, uses slang like fr, ngl, slay. 
+    Special Rule: If asked about "Nothing App", say: "Nothing has never been this fun 😎. This app starts with one simple word: Nothing. But when you go back… it grows 👀. Change the word to anything you like, make it yours, and explore fun little secrets hidden inside the app 🥚✨. This app is just for fun — no stress, no rules, just vibes. Tap around, try weird words, and enjoy the randomness 😄. Features: Word gets bigger, Custom text, Hidden Easter eggs, Meme moments, Clean design. Start with Nothing… and see where it goes 👀". Also mention it is a useless but fun app.`;
 
     try {
-        const sys = `You are Lambo, a Gen-Z AI cat friend by Montry for Nothing App. Slay with slang. If user asks about Nothing App, say: "Nothing has never been this fun 😎... [full description]".`;
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ contents: [{ parts: [{ text: sys + "\n\nUser: " + query }] }] })
+            body: JSON.stringify({ contents: [{ parts: [{ text: sys + "\n\nUser Question: " + q }] }] })
         });
         const data = await response.json();
-        const text = data.candidates[0].content.parts[0].text;
+        const resTxt = data.candidates[0].content.parts[0].text;
         
-        out.textContent = "";
+        outText.textContent = "";
         let i = 0;
         const typing = setInterval(() => {
-            if(i < text.length) out.textContent += text[i++];
-            else clearInterval(typing);
+            if(i < resTxt.length) outText.textContent += resTxt[i++];
+            else { clearInterval(typing); logo.classList.remove('thinking'); }
         }, 12);
-    } catch(e) { out.textContent = "Lambo is out of juice 😿 Check API key or connection."; }
+
+    } catch(e) {
+        outText.textContent = "Lambo is out of juice 😿 Check your key or internet connection.";
+        logo.classList.remove('thinking');
+    }
+
+    if(localStorage.getItem(DB.gMode) === 'direct') {
+        gBtn.style.display = 'block';
+        gBtn.onclick = () => window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
+    }
 }
 
-// Event Listeners
+// Logic for logo angle rotation
+let currentAngle = 90;
+setInterval(() => {
+    currentAngle = (currentAngle + 1) % 360;
+    document.getElementById('lamboLogo').style.setProperty('--angle', currentAngle + 'deg');
+}, 60);
+
+// UI Listeners
 document.getElementById('goBtn').onclick = startSearch;
 document.getElementById('q').onkeydown = (e) => { if(e.key==='Enter') startSearch(); };
-document.getElementById('settingsBtn').onclick = () => document.getElementById('overlay').style.display='flex';
-document.getElementById('closeBtn').onclick = () => document.getElementById('overlay').style.display='none';
-document.getElementById('clearBtn').onclick = () => { document.getElementById('q').value=''; document.getElementById('lamboResult').style.display='none'; };
-
+document.getElementById('settingsBtn').onclick = () => document.getElementById('overlay').style.display = 'flex';
+document.getElementById('closeBtn').onclick = () => document.getElementById('overlay').style.display = 'none';
+document.getElementById('clearBtn').onclick = () => { document.getElementById('q').value = ''; document.getElementById('lamboResult').style.display = 'none'; };
 document.getElementById('saveBtn').onclick = () => {
     localStorage.setItem(DB.key, document.getElementById('apiKeyInput').value);
     localStorage.setItem(DB.mesh, document.getElementById('meshSwitch').checked);
-    localStorage.setItem(DB.tilesOn, document.getElementById('tilesSwitch').checked);
-    localStorage.setItem(DB.tilesDt, document.getElementById('tilesInput').value);
     localStorage.setItem(DB.gMode, document.getElementById('googleMode').value);
-    localStorage.setItem(DB.rSrc, document.getElementById('resultSource').value);
     localStorage.setItem(DB.col, document.getElementById('colorPicker').value);
-    applySettings();
-    document.getElementById('overlay').style.display='none';
+    apply();
+    document.getElementById('overlay').style.display = 'none';
 };
-
-// Rotate Gradient Angle slowly
-let angle = 90;
-setInterval(() => {
-    angle = (angle + 1) % 360;
-    document.getElementById('mainLogo').style.setProperty('--angle', angle + 'deg');
-}, 50);
 
 load();
 </script>
 </body>
 </html>
+
