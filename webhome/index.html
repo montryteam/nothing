@@ -8,7 +8,7 @@
 <style>
 :root{
 --bg:#0f1115;--fg:#e4e6eb;--surface:#1a1c21;--radius:26px;--shadow:0 12px 36px rgba(0,0,0,0.6);
---button-bg:#e4e6eb;--button-fg:#0f1115;
+--button-bg:#e4e6eb;--button-fg:#0f1115;--accent:#e4e6eb;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -22,25 +22,24 @@ body{background:var(--bg);color:var(--fg);font-family:Inter,system-ui,Arial,sans
 .byline{color:#a8a8a8;font-size:13px;text-align:center;margin-top:4px;}
 .card{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);border:1px solid rgba(228,230,235,0.05);}
 .row{display:flex;gap:10px;align-items:center;}
-input[type="text"],input[type="password"]{flex:1;background:#0b0b0b;color:var(--fg);border-radius:28px;padding:14px;border:1px solid rgba(255,255,255,0.03);font-size:15px;outline:none;}
+input[type="text"],input[type="password"],textarea{flex:1;background:#0b0b0b;color:var(--fg);border-radius:28px;padding:14px;border:1px solid rgba(255,255,255,0.03);font-size:15px;outline:none;}
 button.btn{background:var(--button-bg);color:var(--button-fg);padding:12px 14px;border-radius:28px;border:0;font-weight:700;font-size:14px;cursor:pointer;transition:0.3s;}
 .result{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);min-height:110px;overflow:auto;display:none;border:1px solid rgba(228,230,235,0.05);}
 .sectionTitle{color:#dcdcdc;font-weight:700;margin-bottom:8px;font-size:11px;display:flex;align-items:center;gap:8px;text-transform:uppercase;opacity:0.6;letter-spacing:1px;}
 .lamboText{font-size:15px;line-height:1.5;color:#eaeaea;white-space:pre-wrap;}
-.googleResultsContainer{margin-top:8px;}
-.shortcuts{display:flex;gap:12px;justify-content:center;width:100%;max-width:420px;flex-wrap:wrap;display:none;}
-.tile{width:58px;height:58px;border-radius:18px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;cursor:pointer;transition:0.3s;border:1px solid rgba(228,230,235,0.05);color:var(--fg);text-align:center;overflow:hidden;}
+.shortcuts{display:none;gap:12px;justify-content:center;width:100%;max-width:420px;flex-wrap:wrap;margin:5px 0;}
+.tile{width:65px;height:65px;border-radius:18px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;cursor:pointer;transition:0.3s;border:1px solid rgba(228,230,235,0.05);color:var(--fg);text-align:center;overflow:hidden;padding:5px;}
 .tile:hover{transform:translateY(-4px);background:var(--accent);color:var(--bg);}
 .historyList{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
 .historyItemCard{background:rgba(228,230,235,0.03);padding:12px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,0.02);}
-.historyText{color:var(--fg);cursor:pointer;font-size:13px;opacity:0.8;flex:1}
-.historyDel{cursor:pointer;opacity:0.3;padding-left:10px;font-size:18px;}
-.settingsFloat{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:14px;background:var(--button-bg);color:var(--button-fg);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,0.6);cursor:pointer;z-index:60;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:70;}
-.settingsBox{width:92%;max-width:420px;background:var(--surface);border-radius:20px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;border:1px solid rgba(228,230,235,0.1);max-height:90vh;overflow-y:auto;}
-.label{font-size:13px;color:#cfcfcf;font-weight:700;margin-bottom:6px;}
+.historyText{color:var(--fg);cursor:pointer;font-size:13px;opacity:0.8;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.historyDel{cursor:pointer;opacity:0.3;padding:0 10px;font-size:20px;line-height:1;color:#fff;}
+.settingsFloat{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:14px;background:var(--button-bg);color:var(--button-fg);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,0.6);cursor:pointer;z-index:100;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:200;}
+.settingsBox{width:92%;max-width:420px;background:var(--surface);border-radius:20px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;border:1px solid rgba(228,230,235,0.1);max-height:85vh;overflow-y:auto;}
+.label{font-size:13px;color:#cfcfcf;font-weight:700;margin-bottom:4px;}
 select,input[type="color"]{padding:10px;border-radius:12px;border:none;background:#0a0a0a;color:#fff;width:100%;}
-.muted{color:#a7a7a7;font-size:13px}
+.muted{color:#a7a7a7;font-size:12px}
 .typingCursor{display:inline-block;width:8px;height:16px;background:var(--fg);margin-left:6px;opacity:0.9;animation:blink 1s step-end infinite;vertical-align:middle;}
 @keyframes blink{50%{opacity:0}}
 </style>
@@ -50,86 +49,192 @@ select,input[type="color"]{padding:10px;border-radius:12px;border:none;backgroun
 <div class="logo" id="logo">LAMBO</div>
 <div class="subtitle">your friend & smart AI assistant 😺</div>
 <div class="byline">developed by <strong>Montry</strong> for <a href="https://montryteam.github.io/app.montry.nothing/" target="_blank" style="color:#9ad6ff;text-decoration:underline">Nothing</a></div>
+
 <div class="card">
-<div class="row">
-<input id="q" type="text" placeholder="ask lambo or paste a URL... ✨" aria-label="search input" />
-<button class="btn" id="goBtn">GO</button>
+    <div class="row">
+        <input id="q" type="text" placeholder="ask lambo or paste a URL... ✨" />
+        <button class="btn" id="goBtn">GO</button>
+    </div>
+    <div style="margin-top:10px; display:flex; gap:8px;">
+        <button class="btn" id="clearBtn" style="background:#222;color:#fff;flex:1">✖ Clear</button>
+        <button class="btn" id="summarizeBtn" style="display:none;flex:2">Summarize Link 📄</button>
+    </div>
 </div>
-<div style="margin-top:10px; display:flex; gap:8px;">
-<button class="btn" id="clearBtn" title="clear input" style="background:#222;color:#fff;flex:1">✖ Clear</button>
-<button class="btn" id="summarizeBtn" style="display:none;flex:2">Summarize Link 📄</button>
-</div>
-</div>
+
 <div class="shortcuts" id="shortcutsArea"></div>
+
 <div class="result" id="lamboResult">
-<div class="sectionTitle">✦ LAMBO vibe — AI answer</div>
-<div class="lamboText" id="lamboText">Lambo is chillin' — drop a question or link above 😼 <span class="typingCursor"></span></div>
+    <div class="sectionTitle">✦ LAMBO vibe — AI answer</div>
+    <div class="lamboText" id="lamboText">Lambo is chillin' 😼 <span class="typingCursor"></span></div>
 </div>
+
 <div class="result" id="googleResult">
-<div class="sectionTitle">🌐 GOOGLE results</div>
-<div id="googleResultsContainer" class="googleResultsContainer">
-<div class="gcse-search"></div>
+    <div class="sectionTitle">🌐 GOOGLE results</div>
+    <div id="googleResultsContainer" class="googleResultsContainer">
+        <div class="gcse-search"></div>
+    </div>
+    <button class="btn" id="openGoogleBtn" style="margin-top:8px;width:100%;border-radius:28px;display:none;">Open in Google 🌐</button>
 </div>
-<button class="btn" id="openGoogleBtn" style="margin-top:8px;width:100%;border-radius:28px;display:none;">Open in Google 🌐</button>
-</div>
+
 <div class="card">
-<div class="label">Search history ⏱️</div>
-<div id="history" class="historyList muted">no history yet.</div>
+    <div class="label">Search history ⏱️</div>
+    <div id="history" class="historyList muted">no history yet.</div>
 </div>
-<div class="settingsFloat" id="settingsBtn" title="settings">⚙</div>
+
+<div class="settingsFloat" id="settingsBtn">⚙</div>
+
 <div class="overlay" id="overlay">
-<div class="settingsBox" role="dialog" aria-modal="true">
-<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:800">SETTINGS ⚡</div><div style="font-size:12px;color:#9d9d9d">Gen-Z mode ✨</div></div>
-<div><div class="label">API key (Gemini) 🔐</div><input id="apiKeyInput" type="password" placeholder="paste your Gemini API key" /></div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0"><div class="label" style="margin:0">Live Mesh Background</div><input type="checkbox" id="meshSwitch"></div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0"><div class="label" style="margin:0">Enable Tiles</div><input type="checkbox" id="tilesSwitch"></div>
-<div id="tilesConfigArea" style="display:none;border:1px solid #333;padding:10px;border-radius:12px;">
-<div class="label">Custom Tiles (Name | URL)</div>
-<textarea id="tilesInput" style="width:100%;background:#0b0b0b;color:#fff;border-radius:10px;padding:10px;font-size:12px;height:60px;border:1px solid #333;" placeholder="Google|google.ca&#10;YouTube|youtube.com"></textarea>
-<div class="muted" style="font-size:10px;margin-top:4px">One site per line. Use Name|URL format.</div>
+    <div class="settingsBox">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">SETTINGS ⚡</div>
+            <div style="font-size:12px;color:#9d9d9d">Gen-Z mode ✨</div>
+        </div>
+        
+        <div><div class="label">API key (Gemini) 🔐</div><input id="apiKeyInput" type="password" placeholder="Paste key here..." /></div>
+        
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="label">Live Mesh Background</div><input type="checkbox" id="meshSwitch">
+        </div>
+        
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="label">Enable Tiles</div><input type="checkbox" id="tilesSwitch">
+        </div>
+
+        <div id="tilesConfigArea" style="display:none;">
+            <div class="label">Custom Tiles (Name|URL)</div>
+            <textarea id="tilesInput" style="height:70px; font-size: 12px;" placeholder="Example:&#10;Google|google.ca&#10;YouTube|youtube.com"></textarea>
+            <div class="muted">One site per line. Format: Name|Link</div>
+        </div>
+
+        <div><div class="label">Button color 🎨</div><input id="btnColor" type="color" value="#e4e6eb" /></div>
+
+        <div style="display:flex;gap:8px;">
+            <button class="btn" id="resetBtn" style="flex:1;background:#222;color:#fff">Reset</button>
+            <button class="btn" id="clearHistoryBtn" style="flex:1;background:#222;color:#fff">Clear Hist</button>
+        </div>
+        
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn" id="saveSettingsBtn" style="width:120px">Save</button>
+            <button class="btn" id="closeSettingsBtn" style="background:#333;color:#fff;width:120px">Close</button>
+        </div>
+    </div>
 </div>
-<div><div class="label">Button color 🎨</div><input id="btnColor" type="color" value="#e4e6eb" /></div>
-<div><div class="label">Search source 🔎</div><select id="searchSource"><option value="both">Both — Lambo + Google</option><option value="lambo">Lambo only</option><option value="google">Google only</option></select></div>
-<div style="display:flex;gap:8px;"><button class="btn" id="resetBtn" style="flex:1;background:#222;color:#fff">Reset</button><button class="btn" id="clearHistoryBtn" style="flex:1;background:#222;color:#fff">Clear history</button></div>
-<div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" id="saveSettingsBtn" style="width:120px">Save</button><button class="btn" id="closeSettingsBtn" style="background:#222;color:#fff;width:120px">Close</button></div>
-</div>
-</div>
+
 <script>
-const LS={apiKey:'LAMBO_API_KEY',btnColor:'LAMBO_BTN_COLOR',searchSource:'LAMBO_SEARCH_SOURCE',googleMode:'LAMBO_GOOGLE_MODE',history:'LAMBO_HISTORY',mesh:'LAMBO_MESH_BG',tiles:'LAMBO_TILES_DATA',tilesEnabled:'LAMBO_TILES_ON'};
-const DEFAULTS={btnColor:'#e4e6eb',searchSource:'both',googleMode:'cse',mesh:false,tilesEnabled:false,tilesData:''};
-let API_KEY=localStorage.getItem(LS.apiKey)||'';
-let BTN_COLOR=localStorage.getItem(LS.btnColor)||DEFAULTS.btnColor;
-let SEARCH_SOURCE=localStorage.getItem(LS.searchSource)||DEFAULTS.searchSource;
-let MESH_ENABLED=localStorage.getItem(LS.mesh)==='true';
-let TILES_ENABLED=localStorage.getItem(LS.tilesEnabled)==='true';
-let TILES_DATA=localStorage.getItem(LS.tiles)||DEFAULTS.tilesData;
-let HISTORY=JSON.parse(localStorage.getItem(LS.history)||'[]');
-const qEl=document.getElementById('q'),goBtn=document.getElementById('goBtn'),lamboTextEl=document.getElementById('lamboText'),historyEl=document.getElementById('history'),meshBg=document.getElementById('meshBg'),meshSwitch=document.getElementById('meshSwitch'),summarizeBtn=document.getElementById('summarizeBtn'),tilesSwitch=document.getElementById('tilesSwitch'),tilesInput=document.getElementById('tilesInput'),shortcutsArea=document.getElementById('shortcutsArea'),tilesConfigArea=document.getElementById('tilesConfigArea');
-const apiKeyInput=document.getElementById('apiKeyInput'),btnColorInput=document.getElementById('btnColor'),searchSourceSelect=document.getElementById('searchSource'),saveSettingsBtn=document.getElementById('saveSettingsBtn'),overlay=document.getElementById('overlay');
-apiKeyInput.value=API_KEY; btnColorInput.value=BTN_COLOR; searchSourceSelect.value=SEARCH_SOURCE; meshSwitch.checked=MESH_ENABLED; tilesSwitch.checked=TILES_ENABLED; tilesInput.value=TILES_DATA;
-applyButtonColor(BTN_COLOR); updateMesh(); renderHistory(); renderTiles(); toggleTilesConfig();
-goBtn.addEventListener('click',()=>mainSearch()); qEl.addEventListener('keydown',e=>{if(e.key==='Enter') mainSearch()});
-qEl.addEventListener('input',checkUrl); summarizeBtn.addEventListener('click',()=>mainSearch(true));
-document.getElementById('settingsBtn').addEventListener('click',()=>overlay.style.display='flex');
-document.getElementById('closeSettingsBtn').addEventListener('click',()=>overlay.style.display='none');
-tilesSwitch.addEventListener('change',toggleTilesConfig);
-saveSettingsBtn.addEventListener('click',saveSettings);
-document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Reset?')){localStorage.clear();location.reload();}});
-document.getElementById('clearBtn').addEventListener('click',()=>{qEl.value='';checkUrl();});
-function applyButtonColor(c){document.documentElement.style.setProperty('--button-bg',c); const rgb=c.replace('#',''); const lum=0.2126*parseInt(rgb.substr(0,2),16)+0.7152*parseInt(rgb.substr(2,2),16)+0.0722*parseInt(rgb.substr(4,2),16); document.documentElement.style.setProperty('--button-fg',lum>150?'#000':'#fff'); document.documentElement.style.setProperty('--accent',c);}
-function updateMesh(){meshBg.style.display=MESH_ENABLED?'block':'none';}
-function toggleTilesConfig(){tilesConfigArea.style.display=tilesSwitch.checked?'block':'none';}
-function checkUrl(){const val=qEl.value.trim(); const isUrl=/^https?:\/\//i.test(val)||(val.includes('.')&&!val.includes(' ')); summarizeBtn.style.display=isUrl?'block':'none';}
-function renderTiles(){if(!TILES_ENABLED||!TILES_DATA.trim()){shortcutsArea.style.display='none';return;} const lines=TILES_DATA.split('\n').filter(l=>l.includes('|')); if(lines.length===0){shortcutsArea.style.display='none';return;} shortcutsArea.style.display='flex'; shortcutsArea.innerHTML=lines.map(line=>{const [name,url]=line.split('|'); const finalUrl=url.trim().startsWith('http')?url.trim():'https://'+url.trim(); return `<div class="tile" onclick="window.location.href='${finalUrl}'">${name.trim()}</div>`;}).join('');}
-function saveSettings(){API_KEY=apiKeyInput.value.trim(); BTN_COLOR=btnColorInput.value; SEARCH_SOURCE=searchSourceSelect.value; MESH_ENABLED=meshSwitch.checked; TILES_ENABLED=tilesSwitch.checked; TILES_DATA=tilesInput.value; localStorage.setItem(LS.apiKey,API_KEY); localStorage.setItem(LS.btnColor,BTN_COLOR); localStorage.setItem(LS.searchSource,SEARCH_SOURCE); localStorage.setItem(LS.mesh,MESH_ENABLED); localStorage.setItem(LS.tilesEnabled,TILES_ENABLED); localStorage.setItem(LS.tiles,TILES_DATA); applyButtonColor(BTN_COLOR); updateMesh(); renderTiles(); overlay.style.display='none'; toast('Saved ✨');}
-function renderHistory(){if(HISTORY.length===0){historyEl.innerHTML='<div class="muted">no history yet ✨</div>';return;} historyEl.innerHTML=HISTORY.map(h=>`<div class="historyItemCard"><div class="historyText" onclick="repaste('${h.q.replace(/'/g,"\\'")}')">${h.q}</div><div class="historyDel" onclick="deleteHist(${h.id})">×</div></div>`).join('');}
-function deleteHist(id){HISTORY=HISTORY.filter(h=>h.id!==id); localStorage.setItem(LS.history,JSON.stringify(HISTORY)); renderHistory();}
-function repaste(q){qEl.value=q; checkUrl(); mainSearch();}
-function toast(msg){const el=document.createElement('div');el.textContent=msg;el.style.position='fixed';el.style.left='50%';el.style.transform='translateX(-50%)';el.style.bottom='90px';el.style.background='#222';el.style.color='#fff';el.style.padding='10px 14px';el.style.borderRadius='12px';document.body.appendChild(el);setTimeout(()=>el.remove(),2000);}
-async function mainSearch(isSummary=false){const q=qEl.value.trim(); if(!q)return; if(!isSummary&&(/^https?:\/\//i.test(q)||(q.includes('.')&&!q.includes(' ')))){window.location.href=q.startsWith('http')?q:'https://'+q;return;} HISTORY=HISTORY.filter(h=>h.q!==q); HISTORY.unshift({q,id:Date.now()}); localStorage.setItem(LS.history,JSON.stringify(HISTORY)); renderHistory(); document.getElementById('logo').style.animation='logoThink 3s infinite'; document.getElementById('lamboResult').style.display='block'; await renderLambo(q,isSummary); document.getElementById('logo').style.animation='logoIdle 6s infinite';}
-async function renderLambo(q,isSummary){if(!API_KEY){lamboTextEl.textContent='No API key ⚙';return;} lamboTextEl.textContent='Thinking...'; try{const prompt=isSummary?`Summarize this URL: ${q}`:`You are Lambo AI. Answer concisely in en-CA: ${q}`; const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})}); const data=await res.json(); const txt=data?.candidates?.[0]?.content?.parts?.[0]?.text||'No reply'; await typeText(lamboTextEl,txt,10);}catch(e){lamboTextEl.textContent='Error 😿';}}
-function typeText(el,text,delay){return new Promise(resolve=>{el.textContent='';let i=0;function step(){if(i<text.length){el.textContent+=text[i++];setTimeout(step,delay);}else resolve();}step();});}
+const LS = { key: 'LMB_AK', col: 'LMB_CL', mesh: 'LMB_MSH', hist: 'LMB_HST', tOn: 'LMB_TON', tDt: 'LMB_TDT' };
+let HISTORY = JSON.parse(localStorage.getItem(LS.hist) || '[]');
+
+const qInput = document.getElementById('q'), goBtn = document.getElementById('goBtn');
+const lamboText = document.getElementById('lamboText'), overlay = document.getElementById('overlay');
+const shortcutsArea = document.getElementById('shortcutsArea'), tilesSwitch = document.getElementById('tilesSwitch');
+const summarizeBtn = document.getElementById('summarizeBtn');
+
+function loadSettings() {
+    document.getElementById('apiKeyInput').value = localStorage.getItem(LS.key) || '';
+    document.getElementById('btnColor').value = localStorage.getItem(LS.col) || '#e4e6eb';
+    document.getElementById('meshSwitch').checked = localStorage.getItem(LS.mesh) === 'true';
+    tilesSwitch.checked = localStorage.getItem(LS.tOn) === 'true';
+    document.getElementById('tilesInput').value = localStorage.getItem(LS.tDt) || '';
+    applyVisuals(); renderTiles(); renderHistory();
+}
+
+function applyVisuals() {
+    const color = document.getElementById('btnColor').value;
+    document.documentElement.style.setProperty('--button-bg', color);
+    document.documentElement.style.setProperty('--accent', color);
+    const rgb = color.replace('#','');
+    const r = parseInt(rgb.substr(0,2),16), g = parseInt(rgb.substr(2,2),16), b = parseInt(rgb.substr(4,2),16);
+    const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+    document.documentElement.style.setProperty('--button-fg', lum > 150 ? '#0f1115' : '#fff');
+    document.getElementById('meshBg').style.display = document.getElementById('meshSwitch').checked ? 'block' : 'none';
+    document.getElementById('tilesConfigArea').style.display = tilesSwitch.checked ? 'block' : 'none';
+}
+
+function saveSettings() {
+    localStorage.setItem(LS.key, document.getElementById('apiKeyInput').value);
+    localStorage.setItem(LS.col, document.getElementById('btnColor').value);
+    localStorage.setItem(LS.mesh, document.getElementById('meshSwitch').checked);
+    localStorage.setItem(LS.tOn, tilesSwitch.checked);
+    localStorage.setItem(LS.tDt, document.getElementById('tilesInput').value);
+    applyVisuals(); renderTiles(); overlay.style.display = 'none';
+}
+
+function renderTiles() {
+    const data = document.getElementById('tilesInput').value.trim();
+    if (!tilesSwitch.checked || !data) { shortcutsArea.style.display = 'none'; return; }
+    const lines = data.split('\n').filter(l => l.includes('|'));
+    if (lines.length === 0) { shortcutsArea.style.display = 'none'; return; }
+    shortcutsArea.style.display = 'flex';
+    shortcutsArea.innerHTML = lines.map(line => {
+        const p = line.split('|');
+        const url = p[1].trim().startsWith('http') ? p[1].trim() : 'https://' + p[1].trim();
+        return `<div class="tile" onclick="window.open('${url}', '_blank')">${p[0].trim()}</div>`;
+    }).join('');
+}
+
+async function performSearch(isSum = false) {
+    const q = qInput.value.trim(); if (!q) return;
+    if (!isSum && (/^https?:\/\//i.test(q) || (q.includes('.') && !q.includes(' ')))) { window.location.href = q.startsWith('http') ? q : 'https://' + q; return; }
+    HISTORY = HISTORY.filter(h => h.q !== q); HISTORY.unshift({ q, id: Date.now() });
+    if (HISTORY.length > 15) HISTORY.pop(); localStorage.setItem(LS.hist, JSON.stringify(HISTORY));
+    renderHistory();
+    document.getElementById('lamboResult').style.display = 'block';
+    document.getElementById('googleResult').style.display = isSum ? 'none' : 'block';
+    document.getElementById('logo').style.animation = 'logoThink 3s infinite';
+    await callGemini(q, isSum);
+    document.getElementById('logo').style.animation = 'logoIdle 6s infinite';
+}
+
+async function callGemini(query, isSum) {
+    const apiKey = localStorage.getItem(LS.key);
+    if (!apiKey) { lamboText.textContent = 'Setup API key in Settings ⚙'; return; }
+    lamboText.textContent = 'Lambo is thinking... 😼';
+    
+    const sysPrompt = `Identity: You are Lambo, a friendly mobile AI cat developed by Montry for the Nothing App. You are a chill friend who helps others.
+    Personality: Gen-Z style (use slay, fr, ngl, vibes, lowkey, etc.). Be very helpful and polite but fun.
+    Special Info: If the user asks about "Nothing App" or what it is, respond exactly with: "Nothing has never been this fun 😎. This app starts with one simple word: Nothing. But when you go back… it grows 👀. Change the word to anything you like, make it yours, and explore fun little secrets hidden inside the app 🥚✨. Some words unlock surprises, some trigger funny moments, and others might show you things you didn’t expect 👀. This app is just for fun — no stress, no rules, just vibes. Tap around, try weird words, and enjoy the randomness 😄. Features: The word gets bigger when you go back, Customize the text with anything you want, Hidden Easter eggs, Fun surprises and meme-style moments, Clean and simple design. Start with Nothing… and see where it goes 👀". Also mention it's a useless app but in a funny way.`;
+
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ contents: [{ parts: [{ text: sysPrompt + "\n\nUser Question: " + (isSum ? "Summarize this: " + query : query) }] }] })
+        });
+        const data = await response.json();
+        const resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Lambo is out of juice 😿';
+        lamboText.textContent = ''; let ci = 0;
+        const typing = setInterval(() => { if (ci < resultText.length) lamboText.textContent += resultText[ci++]; else clearInterval(typing); }, 12);
+    } catch (err) { lamboText.textContent = 'Error connecting to Gemini. Check your key.'; }
+}
+
+function renderHistory() {
+    const hDiv = document.getElementById('history');
+    if (HISTORY.length === 0) { hDiv.innerHTML = '<div class="muted">No history yet.</div>'; return; }
+    hDiv.innerHTML = HISTORY.map(item => `
+        <div class="historyItemCard">
+            <div class="historyText" onclick="fillAndSearch('${item.q.replace(/'/g,"\\'")}')">${item.q}</div>
+            <div class="historyDel" onclick="deleteHistoryItem(${item.id})">×</div>
+        </div>
+    `).join('');
+}
+
+window.fillAndSearch = (val) => { qInput.value = val; checkInput(); performSearch(); };
+window.deleteHistoryItem = (id) => { HISTORY = HISTORY.filter(h => h.id !== id); localStorage.setItem(LS.hist, JSON.stringify(HISTORY)); renderHistory(); };
+function checkInput() { const val = qInput.value.trim(); summarizeBtn.style.display = (val.includes('.') && !val.includes(' ')) ? 'block' : 'none'; }
+
+goBtn.onclick = () => performSearch();
+qInput.onkeydown = (e) => { if (e.key === 'Enter') performSearch(); };
+qInput.oninput = checkInput;
+summarizeBtn.onclick = () => performSearch(true);
+document.getElementById('settingsBtn').onclick = () => { overlay.style.display = 'flex'; };
+document.getElementById('closeSettingsBtn').onclick = () => { overlay.style.display = 'none'; };
+document.getElementById('saveSettingsBtn').onclick = saveSettings;
+document.getElementById('clearBtn').onclick = () => { qInput.value = ''; checkInput(); };
+document.getElementById('resetBtn').onclick = () => { if(confirm('Reset all?')){ localStorage.clear(); location.reload(); } };
+document.getElementById('clearHistoryBtn').onclick = () => { HISTORY = []; localStorage.removeItem(LS.hist); renderHistory(); };
+tilesSwitch.onchange = applyVisuals;
+
+loadSettings();
 </script>
 </body>
 </html>
-
