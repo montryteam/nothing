@@ -1,410 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lambo Search — Nothing App</title>
-<script async src="https://cse.google.com/cse.js?cx=f015436e565c94c8d"></script>
-<style>
-:root{
---bg:#0f1115; /* الخلفية الجديدة */
---fg:#ffffff;
---primary:#e4e6eb; /* اللون الأساسي الجديد */
---surface:rgba(255,255,255,0.08);
---glass-border:rgba(255,255,255,0.18);
---radius:24px;
---blur:blur(18px);
---button-bg:#e4e6eb; /* لون الزر الافتراضي */
---button-fg:#000;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lambo Search — Nothing App</title>
+    <script async src="https://cse.google.com/cse.js?cx=f015436e565c94c8d"></script>
+    <style>
+        :root {
+            --bg: #0f1115;
+            --fg: #e4e6eb;
+            --primary: #e4e6eb;
+            --surface: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --radius: 24px;
+            --blur: blur(18px);
+            --button-bg: #e4e6eb;
+            --button-fg: #0f1115;
+        }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-background:var(--bg);
-color:var(--fg);
-font-family:Inter,system-ui,Arial,sans-serif;
-padding:18px;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:12px;
-}
+        * { box-sizing: border-box; margin: 0; padding: 0 }
+        html, body { height: 100% }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: Inter, system-ui, Arial, sans-serif;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
 
-.logo{
-font-weight:900;
-font-size:36px;
-text-align:center;
-background:linear-gradient(90deg,#6a00ff,#009dff,var(--primary));
-background-size:300% 300%;
--webkit-background-clip:text;
-color:transparent;
-animation:glowIdle 6s ease-in-out infinite;
-border-radius:20px;
-padding:6px 0;
-}
+        .logo {
+            font-weight: 900;
+            font-size: 36px;
+            text-align: center;
+            background: linear-gradient(90deg, #e4e6eb, #888a8d, #e4e6eb);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: glowIdle 6s ease-in-out infinite;
+            border-radius: 20px;
+            padding: 6px 0;
+        }
 
-@keyframes glowIdle{
-0%{text-shadow:0 0 6px rgba(228,230,235,.4);}
-25%{text-shadow:0 0 12px rgba(228,230,235,.6);}
-50%{text-shadow:0 0 8px rgba(228,230,235,.5);}
-75%{text-shadow:0 0 16px rgba(228,230,235,1);}
-100%{text-shadow:0 0 10px rgba(228,230,235,.6);}
-}
+        @keyframes glowIdle {
+            0% { text-shadow: 0 0 6px rgba(228, 230, 235, .2); }
+            50% { text-shadow: 0 0 12px rgba(228, 230, 235, .4); }
+            100% { text-shadow: 0 0 6px rgba(228, 230, 235, .2); }
+        }
 
-.thinking{
-animation:glowThink 1.2s linear infinite;
-}
+        .thinking { animation: glowThink 1.2s linear infinite; }
 
-@keyframes glowThink{
-0%{text-shadow:0 0 10px #ff004c,0 0 30px #ff004c;}
-20%{text-shadow:0 0 10px #ffae00,0 0 30px #ffae00;}
-40%{text-shadow:0 0 10px #00ff9d,0 0 30px #00ff9d;}
-60%{text-shadow:0 0 10px #00c8ff,0 0 30px #00c8ff;}
-80%{text-shadow:0 0 10px #9d00ff,0 0 30px #9d00ff;}
-100%{text-shadow:0 0 10px #ff004c,0 0 30px #ff004c;}
-}
+        @keyframes glowThink {
+            0% { text-shadow: 0 0 10px #ff004c; }
+            50% { text-shadow: 0 0 10px #00c8ff; }
+            100% { text-shadow: 0 0 10px #ff004c; }
+        }
 
-.card{
-width:100%;
-max-width:420px;
-background:var(--surface);
-backdrop-filter:var(--blur);
--webkit-backdrop-filter:var(--blur);
-border:1px solid var(--glass-border);
-border-radius:var(--radius);
-padding:14px;
-box-shadow:0 12px 36px rgba(0,0,0,0.6);
-}
+        .card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--surface);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+        }
 
-.row{display:flex;gap:10px;align-items:center;}
-input[type="text"]{
-flex:1;
-padding:14px;
-border-radius:28px;
-border:1px solid rgba(255,255,255,0.03);
-background:rgba(0,0,0,0.4);
-color:var(--fg);
-font-size:15px;
-}
-button.btn{
-background:var(--button-bg);
-color:var(--button-fg);
-padding:12px 14px;
-border-radius:28px;
-border:0;
-font-weight:700;
-font-size:14px;
-cursor:pointer;
-}
+        .row { display: flex; gap: 10px; align-items: center; }
+        input[type="text"] {
+            flex: 1;
+            padding: 14px;
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--fg);
+            font-size: 15px;
+            outline: none;
+        }
 
-.result{
-width:100%;
-max-width:420px;
-background:var(--surface);
-backdrop-filter:var(--blur);
--webkit-backdrop-filter:var(--blur);
-border-radius:var(--radius);
-padding:12px;
-box-shadow:0 12px 36px rgba(0,0,0,0.6);
-min-height:110px;
-overflow:auto;
-display:block;
-}
+        button.btn {
+            background: var(--button-bg);
+            color: var(--button-fg);
+            padding: 12px 14px;
+            border-radius: 28px;
+            border: 0;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button.btn:hover { opacity: 0.9; }
 
-.sectionTitle{color:#dcdcdc;font-weight:700;margin-bottom:8px;font-size:13px;display:flex;align-items:center;gap:8px;}
-.lamboText{font-size:15px;line-height:1.5;color:#eaeaea;white-space:pre-wrap;}
-.googleResultsContainer{margin-top:8px;}
-.historyList{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-.historyItem{color:#fff;text-decoration:underline;cursor:pointer;font-size:13px;opacity:0.95}
-.settingsFloat{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:14px;background:var(--button-bg);color:var(--button-fg);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,0.6);cursor:pointer;z-index:60;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:70;}
-.settingsBox{width:92%;max-width:420px;background:var(--surface);backdrop-filter:var(--blur);border-radius:20px;padding:16px;box-shadow:0 12px 36px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:10px;}
-.label{font-size:13px;color:#cfcfcf;font-weight:700;margin-bottom:6px;}
-.controlRow{display:flex;gap:8px;align-items:center;}
-select,input[type="color"]{padding:10px;border-radius:12px;border:none;background:#0a0a0a;color:#fff;}
-.muted{color:#a7a7a7;font-size:13px}
-.typingCursor{display:inline-block;width:8px;height:16px;background:#fff;margin-left:6px;opacity:0.9;animation:blink 1s step-end infinite;vertical-align:middle;}
-@keyframes blink{50%{opacity:0}}
-</style>
+        .result {
+            width: 100%;
+            max-width: 420px;
+            background: var(--surface);
+            backdrop-filter: var(--blur);
+            border-radius: var(--radius);
+            padding: 12px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+            min-height: 110px;
+        }
+
+        .sectionTitle { color: #888a8d; font-weight: 700; margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .lamboText { font-size: 15px; line-height: 1.5; color: var(--fg); white-space: pre-wrap; }
+        .historyItem { color: var(--fg); text-decoration: underline; cursor: pointer; font-size: 13px; opacity: 0.7; margin-bottom: 5px; }
+        .settingsFloat { position: fixed; right: 18px; bottom: 18px; width: 56px; height: 56px; border-radius: 14px; background: var(--button-bg); color: var(--button-fg); display: flex; align-items: center; justify-content: center; font-weight: 800; cursor: pointer; z-index: 60; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 70; }
+        .settingsBox { width: 92%; max-width: 420px; background: #1a1d23; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; border: 1px solid var(--glass-border); }
+        .label { font-size: 13px; color: #888a8d; font-weight: 700; }
+        select, input[id="apiKeyInput"], input[id="tileURL"] { padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); background: #000; color: #fff; width: 100%; }
+        .typingCursor { display: inline-block; width: 8px; height: 16px; background: var(--fg); margin-left: 6px; animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0 } }
+    </style>
 </head>
 <body>
 
-<div class="logo" id="logo">LAMBO</div>
-<div class="subtitle">your friend & smart AI assistant 😺</div>
-<div class="byline">developed by <strong>Montry</strong> for <a href="https://montryteam.github.io/app.montry.nothing/" target="_blank" style="color:#9ad6ff;text-decoration:underline">Nothing</a></div>
+    <div class="logo" id="logo">LAMBO</div>
+    <div class="subtitle" style="font-size: 14px; opacity: 0.8;">your friend & smart AI assistant 😺</div>
+    <div class="byline" style="font-size: 11px; opacity: 0.5;">developed by <strong>Montry</strong> for Nothing</div>
 
-<div class="card">
-<div class="row">
-<input id="q" type="text" placeholder="ask lambo or paste a URL... ✨" aria-label="search input" />
-<button class="btn" id="goBtn">GO</button>
-</div>
-<div style="margin-top:10px; display:flex; gap:8px;">
-<button class="btn" id="micBtn">🎤</button>
-<button class="btn" id="clearBtn" title="clear input">✖</button>
-</div>
-</div>
+    <div class="card">
+        <div class="row">
+            <input id="q" type="text" placeholder="ask lambo or paste a URL... ✨" />
+            <button class="btn" id="goBtn">GO</button>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+            <button class="btn" id="micBtn">🎤</button>
+            <button class="btn" id="clearBtn">✖</button>
+        </div>
+    </div>
 
-<div class="result" id="lamboResult">
-<div class="sectionTitle">LAMBO vibe — AI answer</div>
-<div class="lamboText" id="lamboText">Lambo is chillin' — drop a question or link above 😼 <span class="typingCursor"></span></div>
-</div>
+    <div class="result" id="lamboResult">
+        <div class="sectionTitle">LAMBO vibe — AI answer</div>
+        <div class="lamboText" id="lamboText">Lambo is chillin' — drop a question... 😼 <span class="typingCursor"></span></div>
+    </div>
 
-<div class="result" id="googleResult">
-<div class="sectionTitle">GOOGLE results</div>
-<div id="googleResultsContainer" class="googleResultsContainer">
-<div class="gcse-search"></div>
-</div>
-<button class="btn" id="openGoogleBtn" style="margin-top:8px;width:100%;border-radius:28px;display:none;">Open in Google 🌐</button>
-</div>
+    <div class="result" id="googleResult">
+        <div class="sectionTitle">GOOGLE results</div>
+        <div id="googleResultsContainer"><div class="gcse-search"></div></div>
+        <button class="btn" id="openGoogleBtn" style="margin-top:8px;width:100%;display:none;">Open in Google 🌐</button>
+    </div>
 
-<div class="card">
-<div class="label">Search history ⏱️</div>
-<div id="history" class="historyList muted">no history yet.</div>
-</div>
+    <div class="card">
+        <div class="label">Search history ⏱️</div>
+        <div id="history" style="margin-top:8px"></div>
+    </div>
 
-<div class="settingsFloat" id="settingsBtn" title="settings">⚙</div>
-<div class="overlay" id="overlay">
-<div class="settingsBox" role="dialog" aria-modal="true">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<div style="font-weight:800">SETTINGS ⚡</div>
-<div style="font-size:12px;color:#9d9d9d">Gen-Z mode ✨</div>
-</div>
+    <div class="settingsFloat" id="settingsBtn">⚙</div>
 
-<div>
-<div class="label">API key (Gemini) 🔐</div>
-<input id="apiKeyInput" type="text" placeholder="paste your Gemini API key" />
-<div class="muted" style="font-size:12px;margin-top:6px">Need a key? <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#9ad6ff;">Open AI Studio</a></div>
-</div>
+    <div class="overlay" id="overlay">
+        <div class="settingsBox">
+            <div style="font-weight:800; border-bottom: 1px solid #333; padding-bottom: 10px;">SETTINGS ⚡</div>
+            <div>
+                <div class="label">API key (Gemini) 🔐</div>
+                <input id="apiKeyInput" type="text" placeholder="paste key here" />
+            </div>
+            <div>
+                <div class="label">Button color 🎨</div>
+                <input id="btnColor" type="color" value="#e4e6eb" style="width:100%; height:40px; border:none; background:none;"/>
+            </div>
+            <div>
+                <div class="label">Search source 🔎</div>
+                <select id="searchSource">
+                    <option value="both">Both — Lambo + Google</option>
+                    <option value="lambo">Lambo only</option>
+                    <option value="google">Google only</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:10px;">
+                <button class="btn" id="saveSettingsBtn" style="flex:1">Save</button>
+                <button class="btn" id="closeSettingsBtn" style="flex:1; background:#333; color:#fff">Close</button>
+            </div>
+        </div>
+    </div>
 
-<div>
-<div class="label">Button color 🎨</div>
-<div class="controlRow">
-<input id="btnColor" type="color" value="#e4e6eb" />
-<div style="flex:1"><div class="muted" style="font-size:13px">Change only button fill color</div></div>
-</div>
-</div>
+    <script>
+        const LS={apiKey:'LAMBO_API_KEY',btnColor:'LAMBO_BTN_COLOR',searchSource:'LAMBO_SEARCH_SOURCE',history:'LAMBO_HISTORY'};
+        const DEFAULTS={btnColor:'#e4e6eb',searchSource:'both'};
+        
+        let API_KEY=localStorage.getItem(LS.apiKey)||'';
+        let BTN_COLOR=localStorage.getItem(LS.btnColor)||DEFAULTS.btnColor;
+        let SEARCH_SOURCE=localStorage.getItem(LS.searchSource)||DEFAULTS.searchSource;
+        let HISTORY=JSON.parse(localStorage.getItem(LS.history)||'[]');
 
-<div>
-<div class="label">Search source 🔎</div>
-<select id="searchSource">
-<option value="both">Both — Lambo + Google</option>
-<option value="lambo">Lambo only</option>
-<option value="google">Google only</option>
-</select>
-</div>
+        const qEl=document.getElementById('q'), goBtn=document.getElementById('goBtn'), lamboTextEl=document.getElementById('lamboText');
+        const settingsBtn=document.getElementById('settingsBtn'), overlay=document.getElementById('overlay'), btnColorInput=document.getElementById('btnColor');
 
-<div>
-<div class="label">Google mode 🌐</div>
-<select id="googleMode">
-<option value="cse">Programmable Search (default)</option>
-<option value="url">Direct Google Link</option>
-</select>
-</div>
+        document.getElementById('apiKeyInput').value=API_KEY;
+        btnColorInput.value=BTN_COLOR;
+        applyButtonColor(BTN_COLOR);
+        renderHistory();
 
-<div>
-<div class="label">Bing daily background 🌄</div>
-<input type="checkbox" id="bingBgCheck" /> enable
-</div>
+        goBtn.addEventListener('click', mainSearch);
+        settingsBtn.addEventListener('click', ()=>overlay.style.display='flex');
+        document.getElementById('closeSettingsBtn').addEventListener('click', ()=>overlay.style.display='none');
+        document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
 
-<div>
-<div class="label">Quick Tiles 🖱️</div>
-<div class="controlRow">
-<input id="tileURL" type="text" placeholder="Paste URL" />
-<button class="btn" id="addTileBtn">Add Tile</button>
-</div>
-<div id="tilesContainer" style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;"></div>
-</div>
+        function applyButtonColor(c){
+            document.documentElement.style.setProperty('--button-bg', c);
+            const rgb = c.replace('#','');
+            const r=parseInt(rgb.substring(0,2),16), g=parseInt(rgb.substring(2,4),16), b=parseInt(rgb.substring(4,6),16);
+            const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+            document.documentElement.style.setProperty('--button-fg', lum > 150 ? '#0f1115' : '#ffffff');
+        }
 
-<div style="display:flex;gap:8px;">
-<button class="btn" id="resetBtn" style="flex:1;background:#222;color:#fff">Reset defaults</button>
-<button class="btn" id="clearHistoryBtn" style="flex:1;background:#222;color:#fff">Clear history</button>
-</div>
-<div style="display:flex;gap:8px;justify-content:flex-end">
-<button class="btn" id="saveSettingsBtn" style="width:120px">Save</button>
-<button class="btn" id="closeSettingsBtn" style="background:#222;color:#fff;width:120px">Close</button>
-</div>
-</div>
-</div>
+        async function mainSearch(){
+            const q=qEl.value.trim();
+            if(!q) return;
+            HISTORY.unshift({q, ts:Date.now()});
+            if(HISTORY.length>10) HISTORY.pop();
+            localStorage.setItem(LS.history, JSON.stringify(HISTORY));
+            renderHistory();
+            
+            lamboTextEl.textContent = "Lambo is typing...";
+            
+            if(!API_KEY) {
+                setTimeout(() => { lamboTextEl.textContent = "Please add your API Key in settings! 😺"; }, 800);
+                return;
+            }
 
-<script>
-const LS={apiKey:'LAMBO_API_KEY',btnColor:'LAMBO_BTN_COLOR',searchSource:'LAMBO_SEARCH_SOURCE',googleMode:'LAMBO_GOOGLE_MODE',history:'LAMBO_HISTORY',bingBg:'LAMBO_BING_BG',tiles:'LAMBO_TILES'};
-const DEFAULTS={btnColor:'#e4e6eb',searchSource:'both',googleMode:'cse'};
-let API_KEY=localStorage.getItem(LS.apiKey)||'';
-let BTN_COLOR=localStorage.getItem(LS.btnColor)||DEFAULTS.btnColor;
-let SEARCH_SOURCE=localStorage.getItem(LS.searchSource)||DEFAULTS.searchSource;
-let GOOGLE_MODE=localStorage.getItem(LS.googleMode)||DEFAULTS.googleMode;
-let BING_BG=localStorage.getItem(LS.bingBg)==='true';
-let TILES=JSON.parse(localStorage.getItem(LS.tiles)||'[]');
-let HISTORY=JSON.parse(localStorage.getItem(LS.history)||'[]');
+            const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({contents: [{parts: [{text: `You are Lambo, a friendly AI assistant. User: ${q}`}]}]})
+                });
+                const data = await response.json();
+                lamboTextEl.textContent = data.candidates[0].content.parts[0].text;
+            } catch(e) {
+                lamboTextEl.textContent = "Error connecting to Lambo 😿";
+            }
+        }
 
-const qEl=document.getElementById('q'),goBtn=document.getElementById('goBtn'),lamboTextEl=document.getElementById('lamboText'),googleResultsContainer=document.getElementById('googleResultsContainer'),historyEl=document.getElementById('history');
-const settingsBtn=document.getElementById('settingsBtn'),overlay=document.getElementById('overlay'),apiKeyInput=document.getElementById('apiKeyInput'),btnColorInput=document.getElementById('btnColor'),searchSourceSelect=document.getElementById('searchSource'),googleModeSelect=document.getElementById('googleMode'),saveSettingsBtn=document.getElementById('saveSettingsBtn'),closeSettingsBtn=document.getElementById('closeSettingsBtn'),resetBtn=document.getElementById('resetBtn'),clearHistoryBtn=document.getElementById('clearHistoryBtn'),clearInputBtn=document.getElementById('clearBtn'),micBtn=document.getElementById('micBtn'),openGoogleBtn=document.getElementById('openGoogleBtn');
+        function renderHistory(){
+            const hEl = document.getElementById('history');
+            hEl.innerHTML = HISTORY.map(h => `<div class="historyItem" onclick="document.getElementById('q').value='${h.q}';mainSearch();">${h.q}</div>`).join('');
+        }
 
-apiKeyInput.value=API_KEY;
-btnColorInput.value=BTN_COLOR;
-searchSourceSelect.value=SEARCH_SOURCE;
-googleModeSelect.value=GOOGLE_MODE;
-
-applyButtonColor(BTN_COLOR);
-renderHistory();
-
-goBtn.addEventListener('click',mainSearch);
-qEl.addEventListener('keydown',e=>{if(e.key==='Enter') mainSearch()});
-settingsBtn.addEventListener('click',()=>overlay.style.display='flex');
-closeSettingsBtn.addEventListener('click',()=>overlay.style.display='none');
-saveSettingsBtn.addEventListener('click',saveSettings);
-resetBtn.addEventListener('click',resetDefaults);
-clearHistoryBtn.addEventListener('click',clearHistory);
-clearInputBtn.addEventListener('click',()=>qEl.value='');
-
-function applyButtonColor(c){
-document.documentElement.style.setProperty('--button-bg',c);
-const rgb=c.replace('#','');
-const r=parseInt(rgb.substring(0,2),16),g=parseInt(rgb.substring(2,4),16),b=parseInt(rgb.substring(4,6),16);
-const lum=0.2126*r+0.7152*g+0.0722*b;
-const fg=lum>150?'#000':'#fff';
-document.documentElement.style.setProperty('--button-fg',fg);
-}
-
-function pushHistory(q){
-if(!q)return;
-HISTORY.unshift({q,ts:Date.now()});
-if(HISTORY.length>50)HISTORY.pop();
-localStorage.setItem(LS.history,JSON.stringify(HISTORY));
-renderHistory();
-}
-
-function renderHistory(){
-if(!HISTORY||HISTORY.length===0){historyEl.innerHTML='<div class="muted">no history yet ✨</div>'; return;}
-historyEl.innerHTML=HISTORY.map(h=>`<div class="historyItem" onclick="repaste('${escapeForAttr(h.q)}')">${h.q}</div>`).join('');
-}
-
-function escapeForAttr(s){return s.replace(/'/g,"\\'").replace(/"/g,'\\"');}
-function repaste(q){qEl.value=q; mainSearch();}
-function clearHistory(){HISTORY=[]; localStorage.removeItem(LS.history); renderHistory(); toast('History cleared 🗑️');}
-function toast(msg){const el=document.createElement('div'); el.textContent=msg; el.style.position='fixed'; el.style.left='50%'; el.style.transform='translateX(-50%)'; el.style.bottom='90px'; el.style.background='#222'; el.style.color='#fff'; el.style.padding='10px 14px'; el.style.borderRadius='12px'; el.style.boxShadow='0 8px 30px rgba(0,0,0,0.6)'; document.body.appendChild(el); setTimeout(()=>el.style.opacity='0',1600); setTimeout(()=>el.remove(),2200);}
-
-window.repaste=repaste;
-
-async function mainSearch(){
-const q=qEl.value.trim();
-if(!q) return;
-pushHistory(q);
-setLamboThinking(true);
-const doLambo=(SEARCH_SOURCE==='both'||SEARCH_SOURCE==='lambo');
-const doGoogle=(SEARCH_SOURCE==='both'||SEARCH_SOURCE==='google');
-
-if(doLambo){
-document.getElementById('lamboResult').style.display='block';
-await renderLambo(q);
-}else{
-document.getElementById('lamboResult').style.display='none';
-}
-
-if(doGoogle){
-document.getElementById('googleResult').style.display='block';
-renderGoogle(q);
-}else{
-document.getElementById('googleResult').style.display='none';
-}
-
-setLamboThinking(false);
-}
-
-async function renderLambo(q){
-if(!API_KEY){
-lamboTextEl.textContent='No API key — open Settings ⚙';
-return;
-}
-lamboTextEl.textContent='Lambo is thinking... 🌈';
-document.getElementById('logo').classList.add('thinking');
-
-const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API_KEY}`;
-try{
-const body={contents:[{parts:[{text:`You are Lambo, a friendly AI cat, Gen-Z style, created by Montry for Nothing App. User: ${q}`}]}]};
-const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-const data=await res.json();
-const txt=data?.candidates?.[0]?.content?.parts?.[0]?.text??'Lambo had no reply 😿';
-await typeText(lamboTextEl,txt,20);
-document.getElementById('logo').classList.remove('thinking');
-}catch(err){
-lamboTextEl.textContent='Lambo failed — check API key/network.';
-document.getElementById('logo').classList.remove('thinking');
-}
-}
-
-function typeText(el,text,delay=20){
-return new Promise(resolve=>{
-el.textContent='';
-let i=0;
-function step(){if(i<text.length){
-el.textContent+=text[i++];
-setTimeout(step,delay);
-}else resolve();
-} step();
-});
-}
-
-function setLamboThinking(state){
-const logo=document.getElementById('logo');
-if(state){
-logo.classList.add('thinking');
-}else{
-logo.classList.remove('thinking');
-}
-}
-
-function renderGoogle(q){
-if(GOOGLE_MODE==='url'){
-openGoogleBtn.style.display='block';
-openGoogleBtn.onclick=()=>window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
-googleResultsContainer.style.display='none';
-}else{
-openGoogleBtn.stylegoogleResultsContainer.style.display='block';
-}
-}
-
-function saveSettings(){
-API_KEY=apiKeyInput.value.trim();
-BTN_COLOR=btnColorInput.value;
-SEARCH_SOURCE=searchSourceSelect.value;
-GOOGLE_MODE=googleModeSelect.value;
-BING_BG=document.getElementById('bingBgCheck').checked;
-
-localStorage.setItem(LS.apiKey,API_KEY);
-localStorage.setItem(LS.btnColor,BTN_COLOR);
-localStorage.setItem(LS.searchSource,SEARCH_SOURCE);
-localStorage.setItem(LS.googleMode,GOOGLE_MODE);
-localStorage.setItem(LS.bingBg,BING_BG);
-
-applyButtonColor(BTN_COLOR);
-overlay.style.display='none';
-toast('Settings saved ✨');
-}
-
-function resetDefaults(){
-apiKeyInput.value='';
-btnColorInput.value=DEFAULTS.btnColor;
-searchSourceSelect.value=DEFAULTS.searchSource;
-googleModeSelect.value=DEFAULTS.googleMode;
-document.getElementById('bingBgCheck').checked=false;
-
-localStorage.removeItem(LS.apiKey);
-localStorage.removeItem(LS.btnColor);
-localStorage.removeItem(LS.searchSource);
-localStorage.removeItem(LS.googleMode);
-localStorage.removeItem(LS.bingBg);
-
-API_KEY='';
-BTN_COLOR=DEFAULTS.btnColor;
-SEARCH_SOURCE=DEFAULTS.searchSource;
-GOOGLE_MODE=DEFAULTS.googleMode;
-BING_BG=false;
-
-applyButtonColor(BTN_COLOR);
-toast('Settings reset 🔁');
-}
-</script>
+        function saveSettings(){
+            API_KEY = document.getElementById('apiKeyInput').value;
+            BTN_COLOR = btnColorInput.value;
+            localStorage.setItem(LS.apiKey, API_KEY);
+            localStorage.setItem(LS.btnColor, BTN_COLOR);
+            applyButtonColor(BTN_COLOR);
+            overlay.style.display='none';
+        }
+    </script>
 </body>
-</html>
+  </html>
+  
